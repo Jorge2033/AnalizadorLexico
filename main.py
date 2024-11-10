@@ -82,6 +82,23 @@ t_MULTIPLY_ASSIGN = r'\*='
 t_DIVIDE_ASSIGN = r'/='
 t_MODULO_ASSIGN = r'%='
 #--Fin: José Ramos (Expresiones regulares Op. Aritmeticos) ---
+
+#--Inicio: Jorge Gaibor (Delimitadores) --
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+t_SEMICOLON = r';'
+t_COMMA = r','
+t_DOT = r'\.'
+t_COLON = r':'
+t_QUESTION_MARK = r'\?'
+
+#--Fin: Jorge Gaibor (Delimitadores) ---
+
+
 #--Inicio: José Ramos (Expresiones regulares Op. Booleanos) --
 # Operadores de comparación
 t_EQUAL = r'=='
