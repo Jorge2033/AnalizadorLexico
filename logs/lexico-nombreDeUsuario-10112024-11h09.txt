@@ -1,0 +1,4 @@
+Tokens reconocidos:
+LexToken(VARIABLE,'numero',2,1)
+LexToken(NOT_EQUAL,'!=',2,8)
+LexToken(NUMBER,20,2,11)

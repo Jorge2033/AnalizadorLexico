@@ -67,6 +67,22 @@ tokens = (
   'OR',
   'NOT',
   #------Fin: José Ramos (Operadores Booleanos) ------
+
+
+  #--Inicio: Jorge Gaibor (Delimitadores) --
+# Delimitadores
+    'LPAREN',
+    'RPAREN',
+    'LBRACE',
+    'RBRACE',
+    'LBRACKET',
+    'RBRACKET',
+    'SEMICOLON',
+    'COMMA',
+    'DOT',
+    'COLON',
+    'QUESTION_MARK'
+#--Fin: Jorge Gaibor (Delimitadores) ---
 )
 
 #--Inicio: José Ramos (Expresiones regulares Op. Aritmeticos) --
@@ -144,6 +160,22 @@ y === 12
 
 """
 
+
+#--Sección de prueba: Jorge Gaibor (Pruebas de Palabras Reservadas y Delimitadores) --
+prueba_jorge = """
+var total = 20 + 5 * (10 - 3);
+let resultado = total >= 30 ? "Aprobado" : "Reprobado";
+const mensaje = "Resultado final:";
+function calcular(x, y) {
+    if (x > y) {
+        return x;
+    } else {
+        return y;
+    }
+}
+"""
+
+
 # Generar el nombre del archivo log
 usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
 timestamp = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
@@ -153,7 +185,7 @@ log_filename = os.path.join(log_directory, f"lexico-{usuario_git}-{timestamp}.tx
 
 with open(log_filename, 'w') as log_file:
     log_file.write("Tokens reconocidos:\n")
-    lexer.input(prueba)
+    lexer.input(prueba_jorge)
 
     while True:
         tok = lexer.token()
