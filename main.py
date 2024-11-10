@@ -15,7 +15,16 @@ tokens = (
   'MODULO_ASSIGN',
   #------Fin: José Ramos (Operadores Arítmeticos) ------
   #------Inicio: José Ramos (Operadores Booleanos) ------
-
+  'EQUAL',
+  'STRICT_EQUAL',
+  'NOT_EQUAL',
+  'GREATER',
+  'LESS',
+  'GREATER_EQUAL',
+  'LESS_EQUAL',
+  'AND',
+  'OR',
+  'NOT',
   #------Fin: José Ramos (Operadores Booleanos) ------
 )
 
@@ -32,9 +41,19 @@ t_MULTIPLY_ASSIGN = r'\*='
 t_DIVIDE_ASSIGN = r'/='
 t_MODULO_ASSIGN = r'%='
 #--Fin: José Ramos (Expresiones regulares Op. Aritmeticos) ---
-
 #--Inicio: José Ramos (Expresiones regulares Op. Booleanos) --
-
+# Operadores de comparación
+t_EQUAL = r'=='
+t_STRICT_EQUAL = r'==='
+t_NOT_EQUAL = r'!='
+t_GREATER = r'>'
+t_LESS = r'<'
+t_GREATER_EQUAL = r'>='
+t_LESS_EQUAL = r'<='
+# Operadores lógicos
+t_AND = r'&&'
+t_OR = r'\|\|'
+t_NOT = r'!'
 #--Fin: José Ramos (Expresiones regulares Op. Booleanos) --
 
 
