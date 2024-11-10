@@ -1,6 +1,44 @@
 import ply.lex as lex
 import datetime
 import os
+#------Inicio: Jorge Gaibor (Palabras Reservadas) ------
+reserved = {
+    'let': 'LET',
+    'const': 'CONST',
+    'var': 'VAR',
+    'function': 'FUNCTION',
+    'return': 'RETURN',
+    'class': 'CLASS',
+    'if': 'IF',
+    'else': 'ELSE',
+    'for': 'FOR',
+    'while': 'WHILE',
+    'do': 'DO',
+    'switch': 'SWITCH',
+    'case': 'CASE',
+    'default': 'DEFAULT',
+    'break': 'BREAK',
+    'continue': 'CONTINUE',
+    'try': 'TRY',
+    'catch': 'CATCH',
+    'finally': 'FINALLY',
+    'throw': 'THROW',
+    'new': 'NEW',
+    'this': 'THIS',
+    'super': 'SUPER',
+    'typeof': 'TYPEOF',
+    'instanceof': 'INSTANCEOF',
+    'in': 'IN',
+    'void': 'VOID',
+    'delete': 'DELETE',
+    'export': 'EXPORT',
+    'import': 'IMPORT',
+    'as': 'AS',
+    'from': 'FROM',
+    'extends': 'EXTENDS',
+    'implements': 'IMPLEMENTS',
+}
+# ------Fin: Jorge Gaibor (Palabras Reservadas) ------
 
 tokens = (
   'VARIABLE',
