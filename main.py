@@ -82,11 +82,14 @@ lexer = lex.lex()
 
 #--Sección de prueba: José Ramos (Codigo de Prueba) --
 prueba = """
-numero != 20
+variable1 == 10 && variable2 <= 30 || variable3 != variable4
+x += 5
+y === 12
+
 """
 
 # Generar el nombre del archivo log
-usuario_git = "nombreDeUsuario"  # Cambia esto por tu nombre de usuario
+usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
 timestamp = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
 log_directory = "logs"
 os.makedirs(log_directory, exist_ok=True)  # Crea la carpeta 'logs' si no existe
