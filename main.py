@@ -166,11 +166,11 @@ def t_CLASS_VAR(t):
     r'(?<!\w)this\.[a-zA-Z_][a-zA-Z_0-9]*'        
     return t
 
-def t_GLOBAL_VAR(t):
+def t_GLOBAL_VARIABLE(t):
     r'(?<!\w)(globalThis|window)\.[a-zA-Z_][a-zA-Z_0-9]*'  
     return t
 
-def t_STATIC_CLASS_VAR(t):
+def t_STATIC_CLASS_VARIABLE(t):
     r'(?<!\w)[A-Z][a-zA-Z_0-9]*\.[a-zA-Z_][a-zA-Z_0-9]*'   
     return t
 # --Fin: Julio Vivas (deteccion de tipos de variables) --
@@ -199,6 +199,17 @@ function calcular(x, y) {
     }
 }
 """
+
+
+#--Seccion de prueba: Julio Vivas (Algoritmo de Prueba) --
+prueba_julio = """
+let x = 5;
+const PI = 3.14;
+this.instanceVar = 10;
+globalThis.globalVar = 20;
+MyClass.staticVar = 30;
+"""
+
 
 
 # Generar el nombre del archivo log
