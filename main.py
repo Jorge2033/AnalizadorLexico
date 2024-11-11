@@ -131,6 +131,9 @@ t_OR = r'\|\|'
 t_NOT = r'!'
 #--Fin: José Ramos (Expresiones regulares Op. Booleanos) --
 
+
+
+
 def t_NUMBER(t):
   r'\d+'
   t.value = int(t.value)
@@ -149,6 +152,28 @@ t_ignore = ' \t'
 def t_error(t):
   print(f"Token no admitido '{t.value[0]}' en la línea {t.lineno}")
   t.lexer.skip(1)
+
+## --Inicio: Julio Vivas (deteccion de tipos de variables) --
+def t_LOCAL_VAR(t):
+    r'(?<!\w)(let|var)\s+[a-zA-Z_][a-zA-Z_0-9]*'  
+    return t
+
+def t_CONST_VAR(t):
+    r'(?<!\w)const\s+[a-zA-Z_][a-zA-Z_0-9]*'       
+    return t
+
+def t_CLASS_VAR(t):
+    r'(?<!\w)this\.[a-zA-Z_][a-zA-Z_0-9]*'        
+    return t
+
+def t_GLOBAL_VAR(t):
+    r'(?<!\w)(globalThis|window)\.[a-zA-Z_][a-zA-Z_0-9]*'  
+    return t
+
+def t_STATIC_CLASS_VAR(t):
+    r'(?<!\w)[A-Z][a-zA-Z_0-9]*\.[a-zA-Z_][a-zA-Z_0-9]*'   
+    return t
+# --Fin: Julio Vivas (deteccion de tipos de variables) --
 
 lexer = lex.lex()
 
