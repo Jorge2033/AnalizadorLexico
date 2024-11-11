@@ -81,8 +81,13 @@ tokens = (
     'COMMA',
     'DOT',
     'COLON',
-    'QUESTION_MARK'
+    'QUESTION_MARK',
 #--Fin: Jorge Gaibor (Delimitadores) ---
+
+
+#--Inicio: Julio Vivas (Tipos de Variables) --
+    'ASSIGN'
+#--Fin: Julio Vivas (Tipos de Variables) --
 )
 
 #--Inicio: José Ramos (Expresiones regulares Op. Aritmeticos) --
@@ -132,6 +137,9 @@ t_NOT = r'!'
 #--Fin: José Ramos (Expresiones regulares Op. Booleanos) --
 
 
+#--Inicio: Julio Vivas (Expresiones regulares Tipos de Variables) --
+t_ASSIGN = r'='
+#--Fin: Julio Vivas (Expresiones regulares Tipos de Variables) --
 
 
 def t_NUMBER(t):
@@ -167,7 +175,8 @@ def t_CLASS_VAR(t):
     return t
 
 def t_GLOBAL_VARIABLE(t):
-    r'(?<!\w)(globalThis|window)\.[a-zA-Z_][a-zA-Z_0-9]*'  
+    r'[A-Za-z_][A-Za-z0-9_]*'  # Identificadores válidos
+    t.type = 'GLOBAL_VARIABLE' if t.value not in reserved else t.type
     return t
 
 def t_STATIC_CLASS_VARIABLE(t):
@@ -203,11 +212,17 @@ function calcular(x, y) {
 
 #--Seccion de prueba: Julio Vivas (Algoritmo de Prueba) --
 prueba_julio = """
-let x = 5;
-const PI = 3.14;
-this.instanceVar = 10;
-globalThis.globalVar = 20;
-MyClass.staticVar = 30;
+let resultado = 10 + 20;
+const MAX_VALOR = 100;
+var variableGlobal = 50;
+
+class Calculadora {
+    static PI = 3.1415;
+    calcularArea(radio) {
+        let area = Calculadora.PI * radio * radio;
+        return area;
+    }
+}
 """
 
 
@@ -221,7 +236,7 @@ log_filename = os.path.join(log_directory, f"lexico-{usuario_git}-{timestamp}.tx
 
 with open(log_filename, 'w') as log_file:
     log_file.write("Tokens reconocidos:\n")
-    lexer.input(prueba_jorge)
+    lexer.input(prueba_julio)
 
     while True:
         tok = lexer.token()
