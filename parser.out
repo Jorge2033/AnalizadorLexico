@@ -1,0 +1,387 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    AND
+    AS
+    ASSIGN
+    BREAK
+    CASE
+    CATCH
+    COLON
+    CONST
+    CONTINUE
+    DEFAULT
+    DELETE
+    DIVIDE
+    DIVIDE_ASSIGN
+    DO
+    DOT
+    ELSE
+    EQUAL
+    EXPORT
+    EXTENDS
+    FINALLY
+    FOR
+    FROM
+    FUNCTION
+    GREATER
+    GREATER_EQUAL
+    IF
+    IMPLEMENTS
+    IMPORT
+    IN
+    INSTANCEOF
+    LBRACKET
+    LESS
+    LESS_EQUAL
+    LET
+    MINUS
+    MINUS_ASSIGN
+    MODULO
+    MODULO_ASSIGN
+    MULTIPLY
+    MULTIPLY_ASSIGN
+    NEW
+    NOT
+    NOT_EQUAL
+    NUMBER
+    OR
+    PLUS
+    PLUS_ASSIGN
+    QUESTION_MARK
+    RBRACKET
+    RETURN
+    STRICT_EQUAL
+    SUPER
+    SWITCH
+    THIS
+    THROW
+    TRY
+    TYPEOF
+    VAR
+    VOID
+    WHILE
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> statements
+Rule 2     statements -> statement
+Rule 3     statements -> statement statements
+Rule 4     statement -> print
+Rule 5     statement -> structure_declaration
+Rule 6     print -> PRINT LPAREN arguments RPAREN SEMICOLON
+Rule 7     arguments -> argument
+Rule 8     arguments -> argument COMMA arguments
+Rule 9     argument -> STRING
+Rule 10    argument -> VARIABLE
+Rule 11    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
+
+Terminals, with rules where they appear
+
+AND                  : 
+AS                   : 
+ASSIGN               : 
+BREAK                : 
+CASE                 : 
+CATCH                : 
+CLASS                : 11
+COLON                : 
+COMMA                : 8
+CONST                : 
+CONTINUE             : 
+DEFAULT              : 
+DELETE               : 
+DIVIDE               : 
+DIVIDE_ASSIGN        : 
+DO                   : 
+DOT                  : 
+ELSE                 : 
+EQUAL                : 
+EXPORT               : 
+EXTENDS              : 
+FINALLY              : 
+FOR                  : 
+FROM                 : 
+FUNCTION             : 
+GREATER              : 
+GREATER_EQUAL        : 
+IF                   : 
+IMPLEMENTS           : 
+IMPORT               : 
+IN                   : 
+INSTANCEOF           : 
+LBRACE               : 11
+LBRACKET             : 
+LESS                 : 
+LESS_EQUAL           : 
+LET                  : 
+LPAREN               : 6
+MINUS                : 
+MINUS_ASSIGN         : 
+MODULO               : 
+MODULO_ASSIGN        : 
+MULTIPLY             : 
+MULTIPLY_ASSIGN      : 
+NEW                  : 
+NOT                  : 
+NOT_EQUAL            : 
+NUMBER               : 
+OR                   : 
+PLUS                 : 
+PLUS_ASSIGN          : 
+PRINT                : 6
+QUESTION_MARK        : 
+RBRACE               : 11
+RBRACKET             : 
+RETURN               : 
+RPAREN               : 6
+SEMICOLON            : 6
+STRICT_EQUAL         : 
+STRING               : 9
+SUPER                : 
+SWITCH               : 
+THIS                 : 
+THROW                : 
+TRY                  : 
+TYPEOF               : 
+VAR                  : 
+VARIABLE             : 10 11
+VOID                 : 
+WHILE                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+argument             : 7 8
+arguments            : 6 8
+print                : 4
+program              : 0
+statement            : 2 3
+statements           : 1 3 11
+structure_declaration : 5
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . statements
+    (2) statements -> . statement
+    (3) statements -> . statement statements
+    (4) statement -> . print
+    (5) statement -> . structure_declaration
+    (6) print -> . PRINT LPAREN arguments RPAREN SEMICOLON
+    (11) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+
+    PRINT           shift and go to state 6
+    CLASS           shift and go to state 7
+
+    program                        shift and go to state 1
+    statements                     shift and go to state 2
+    statement                      shift and go to state 3
+    print                          shift and go to state 4
+    structure_declaration          shift and go to state 5
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> statements .
+
+    $end            reduce using rule 1 (program -> statements .)
+
+
+state 3
+
+    (2) statements -> statement .
+    (3) statements -> statement . statements
+    (2) statements -> . statement
+    (3) statements -> . statement statements
+    (4) statement -> . print
+    (5) statement -> . structure_declaration
+    (6) print -> . PRINT LPAREN arguments RPAREN SEMICOLON
+    (11) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+
+    $end            reduce using rule 2 (statements -> statement .)
+    RBRACE          reduce using rule 2 (statements -> statement .)
+    PRINT           shift and go to state 6
+    CLASS           shift and go to state 7
+
+    statement                      shift and go to state 3
+    statements                     shift and go to state 8
+    print                          shift and go to state 4
+    structure_declaration          shift and go to state 5
+
+state 4
+
+    (4) statement -> print .
+
+    PRINT           reduce using rule 4 (statement -> print .)
+    CLASS           reduce using rule 4 (statement -> print .)
+    $end            reduce using rule 4 (statement -> print .)
+    RBRACE          reduce using rule 4 (statement -> print .)
+
+
+state 5
+
+    (5) statement -> structure_declaration .
+
+    PRINT           reduce using rule 5 (statement -> structure_declaration .)
+    CLASS           reduce using rule 5 (statement -> structure_declaration .)
+    $end            reduce using rule 5 (statement -> structure_declaration .)
+    RBRACE          reduce using rule 5 (statement -> structure_declaration .)
+
+
+state 6
+
+    (6) print -> PRINT . LPAREN arguments RPAREN SEMICOLON
+
+    LPAREN          shift and go to state 9
+
+
+state 7
+
+    (11) structure_declaration -> CLASS . VARIABLE LBRACE statements RBRACE
+
+    VARIABLE        shift and go to state 10
+
+
+state 8
+
+    (3) statements -> statement statements .
+
+    $end            reduce using rule 3 (statements -> statement statements .)
+    RBRACE          reduce using rule 3 (statements -> statement statements .)
+
+
+state 9
+
+    (6) print -> PRINT LPAREN . arguments RPAREN SEMICOLON
+    (7) arguments -> . argument
+    (8) arguments -> . argument COMMA arguments
+    (9) argument -> . STRING
+    (10) argument -> . VARIABLE
+
+    STRING          shift and go to state 13
+    VARIABLE        shift and go to state 14
+
+    arguments                      shift and go to state 11
+    argument                       shift and go to state 12
+
+state 10
+
+    (11) structure_declaration -> CLASS VARIABLE . LBRACE statements RBRACE
+
+    LBRACE          shift and go to state 15
+
+
+state 11
+
+    (6) print -> PRINT LPAREN arguments . RPAREN SEMICOLON
+
+    RPAREN          shift and go to state 16
+
+
+state 12
+
+    (7) arguments -> argument .
+    (8) arguments -> argument . COMMA arguments
+
+    RPAREN          reduce using rule 7 (arguments -> argument .)
+    COMMA           shift and go to state 17
+
+
+state 13
+
+    (9) argument -> STRING .
+
+    COMMA           reduce using rule 9 (argument -> STRING .)
+    RPAREN          reduce using rule 9 (argument -> STRING .)
+
+
+state 14
+
+    (10) argument -> VARIABLE .
+
+    COMMA           reduce using rule 10 (argument -> VARIABLE .)
+    RPAREN          reduce using rule 10 (argument -> VARIABLE .)
+
+
+state 15
+
+    (11) structure_declaration -> CLASS VARIABLE LBRACE . statements RBRACE
+    (2) statements -> . statement
+    (3) statements -> . statement statements
+    (4) statement -> . print
+    (5) statement -> . structure_declaration
+    (6) print -> . PRINT LPAREN arguments RPAREN SEMICOLON
+    (11) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+
+    PRINT           shift and go to state 6
+    CLASS           shift and go to state 7
+
+    statements                     shift and go to state 18
+    statement                      shift and go to state 3
+    print                          shift and go to state 4
+    structure_declaration          shift and go to state 5
+
+state 16
+
+    (6) print -> PRINT LPAREN arguments RPAREN . SEMICOLON
+
+    SEMICOLON       shift and go to state 19
+
+
+state 17
+
+    (8) arguments -> argument COMMA . arguments
+    (7) arguments -> . argument
+    (8) arguments -> . argument COMMA arguments
+    (9) argument -> . STRING
+    (10) argument -> . VARIABLE
+
+    STRING          shift and go to state 13
+    VARIABLE        shift and go to state 14
+
+    argument                       shift and go to state 12
+    arguments                      shift and go to state 20
+
+state 18
+
+    (11) structure_declaration -> CLASS VARIABLE LBRACE statements . RBRACE
+
+    RBRACE          shift and go to state 21
+
+
+state 19
+
+    (6) print -> PRINT LPAREN arguments RPAREN SEMICOLON .
+
+    PRINT           reduce using rule 6 (print -> PRINT LPAREN arguments RPAREN SEMICOLON .)
+    CLASS           reduce using rule 6 (print -> PRINT LPAREN arguments RPAREN SEMICOLON .)
+    $end            reduce using rule 6 (print -> PRINT LPAREN arguments RPAREN SEMICOLON .)
+    RBRACE          reduce using rule 6 (print -> PRINT LPAREN arguments RPAREN SEMICOLON .)
+
+
+state 20
+
+    (8) arguments -> argument COMMA arguments .
+
+    RPAREN          reduce using rule 8 (arguments -> argument COMMA arguments .)
+
+
+state 21
+
+    (11) structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .
+
+    PRINT           reduce using rule 11 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
+    CLASS           reduce using rule 11 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
+    $end            reduce using rule 11 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
+    RBRACE          reduce using rule 11 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
+
