@@ -1,4 +1,5 @@
 import ply.lex as lex
+import ply.yacc as yacc
 import datetime
 import os
 
@@ -38,12 +39,12 @@ reserved = {
     'from': 'FROM',
     'extends': 'EXTENDS',
     'implements': 'IMPLEMENTS',
+    'print': 'PRINT',
 }
 # ------Fin: Jorge Gaibor (Palabras Reservadas) ------
 
 tokens = (
-    'VARIABLE',
-    'NUMBER',
+    'VARIABLE', 'NUMBER', 'STRING',
     # ------Inicio: José Ramos (Operadores Aritméticos) ------
     'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
     'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN',
@@ -106,6 +107,8 @@ t_NOT = r'!'
 t_ASSIGN = r'='
 # ------Fin: Julio Vivas (Expresiones Regulares Tipos de Variables) ------
 
+t_STRING = r'\".*?\"'
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
@@ -113,7 +116,7 @@ def t_NUMBER(t):
 
 def t_VARIABLE(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'VARIABLE')  # Identifica palabras reservadas primero
+    t.type = reserved.get(t.value, 'VARIABLE')  # Verifica si es una palabra reservada
     return t
 
 def t_newline(t):
@@ -127,118 +130,93 @@ def t_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
-# ------Fin: Reglas Léxicas ------
-# ------Inicio: Reglas Sintácticas por Integrantes ------
-# Gramática global
+# ------Fin: Reglas Léxicas------
+
+# ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
 def p_program(p):
     '''program : statements'''
     pass
 
 def p_statements(p):
-    '''statements : statements statement
-                  | statement'''
+    '''statements : statement
+                  | statement statements'''
     pass
 
 def p_statement(p):
     '''statement : print
-                 | input
-                 | expression
-                 | condition
-                 | variable_declaration
                  | structure_declaration'''
     pass
 
-# ------Inicio: Jorge Gaibor ------
 def p_print(p):
-    '''print : PRINT LPAREN RPAREN
-             | PRINT LPAREN arguments RPAREN'''
+    '''print : PRINT LPAREN arguments RPAREN SEMICOLON'''
     pass
 
 def p_arguments(p):
-    '''arguments : arguments COMMA argument
-                 | argument'''
+    '''arguments : argument
+                 | argument COMMA arguments'''
     pass
 
 def p_argument(p):
     '''argument : STRING
-                | expression'''
+                | VARIABLE'''
     pass
 
 def p_structure_declaration(p):
     '''structure_declaration : CLASS VARIABLE LBRACE statements RBRACE'''
     pass
-# ------Fin: Jorge Gaibor ------
-
-
-
-
-
 
 def p_error(p):
     if p:
         print(f"Error de sintaxis en '{p.value}' línea {p.lineno}")
     else:
         print("Error de sintaxis en el final del archivo")
+# ------Fin: Reglas Sintácticas por Jorge Gaibor ------
 
 parser = yacc.yacc()
-# ------Fin: Reglas Sintácticas ------
 
-
-# ------Sección de Pruebas ------
-prueba_jose = """
-variable1 == 10 && variable2 <= 30 || variable3 != variable4;
-x += 5;
-y === 12;
-"""
-
-prueba_jorge = """
-var total = 20 + 5 * (10 - 3);
-let resultado = total >= 30 ? "Aprobado" : "Reprobado";
-const mensaje = "Resultado final:";
-function calcular(x, y) {
-    if (x > y) {
-        return x;
-    } else {
-        return y;
+# ------Inicio: Prueba de Jorge Gaibor ------
+prueba_jorge_sintactico = '''
+print("Inicio del programa");
+class Vehiculo {
+    constructor(marca, modelo) {
+        this.marca = marca;
+        this.modelo = modelo;
     }
-}
-"""
 
-prueba_julio = """
-let resultado = 10 + 20;
-const MAX_VALOR = 100;
-var variableGlobal = 50;
-
-class Calculadora {
-    static PI = 3.1415;
-    calcularArea(radio) {
-        let area = Calculadora.PI * radio * radio;
-        return area >= 50 ? "Grande" : "Pequeña";
+    mostrarInfo() {
+        print("Marca: " + this.marca + ", Modelo: " + this.modelo);
     }
 }
 
-if (resultado > MAX_VALOR) {
-    console.log("Excedió el límite");
-} else {
-    console.log("Dentro del rango");
-}
-"""
+let auto = new Vehiculo("Toyota", "Corolla");
+auto.mostrarInfo();
+'''
+# ------Fin: Prueba de Jorge Gaibor ------
 
-# Generar el nombre del archivo log
+# ------Inicio: Logs de Errores ------
 usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
 timestamp = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
 log_directory = "logs"
-os.makedirs(log_directory, exist_ok=True)  # Crea la carpeta 'logs' si no existe
-log_filename = os.path.join(log_directory, f"lexico-{usuario_git}-{timestamp}.txt")
+os.makedirs(log_directory, exist_ok=True)
+
+log_filename = os.path.join(log_directory, f"sintactico-{usuario_git}-{timestamp}.txt")
 
 with open(log_filename, 'w') as log_file:
+    # Analiza los tokens primero
+    lexer.input(prueba_jorge_sintactico)
     log_file.write("Tokens reconocidos:\n")
-    lexer.input(prueba_julio)
-
     while True:
         tok = lexer.token()
         if not tok:
             break
-        log_file.write(f"{repr(tok)}\n")
+        log_file.write(f"{repr(tok)}\n")  # Escribe el token en el log
 
-print(f"El análisis léxico se ha guardado en el archivo {log_filename}")
+    log_file.write("\nAnálisis Sintáctico:\n")
+    try:
+        parser.parse(prueba_jorge_sintactico)
+        log_file.write("Análisis completado sin errores\n")
+    except Exception as e:
+        log_file.write(f"Error durante el análisis: {str(e)}\n")
+
+print(f"El análisis léxico y sintáctico se ha guardado en el archivo {log_filename}")
+# ------Fin: Logs de Errores ------
