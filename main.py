@@ -127,6 +127,62 @@ def t_error(t):
     t.lexer.skip(1)
 
 lexer = lex.lex()
+# ------Fin: Reglas Léxicas ------
+# ------Inicio: Reglas Sintácticas por Integrantes ------
+# Gramática global
+def p_program(p):
+    '''program : statements'''
+    pass
+
+def p_statements(p):
+    '''statements : statements statement
+                  | statement'''
+    pass
+
+def p_statement(p):
+    '''statement : print
+                 | input
+                 | expression
+                 | condition
+                 | variable_declaration
+                 | structure_declaration'''
+    pass
+
+# ------Inicio: Jorge Gaibor ------
+def p_print(p):
+    '''print : PRINT LPAREN RPAREN
+             | PRINT LPAREN arguments RPAREN'''
+    pass
+
+def p_arguments(p):
+    '''arguments : arguments COMMA argument
+                 | argument'''
+    pass
+
+def p_argument(p):
+    '''argument : STRING
+                | expression'''
+    pass
+
+def p_structure_declaration(p):
+    '''structure_declaration : CLASS VARIABLE LBRACE statements RBRACE'''
+    pass
+# ------Fin: Jorge Gaibor ------
+
+
+
+
+
+
+def p_error(p):
+    if p:
+        print(f"Error de sintaxis en '{p.value}' línea {p.lineno}")
+    else:
+        print("Error de sintaxis en el final del archivo")
+
+parser = yacc.yacc()
+# ------Fin: Reglas Sintácticas ------
+
 
 # ------Sección de Pruebas ------
 prueba_jose = """
