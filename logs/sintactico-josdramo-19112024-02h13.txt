@@ -1,0 +1,56 @@
+
+Probando código:
+x = input;
+
+Tokens reconocidos:
+LexToken(VARIABLE,'x',1,0)
+LexToken(ASSIGN,'=',1,2)
+LexToken(INPUT,'input',1,4)
+LexToken(SEMICOLON,';',1,9)
+
+Análisis Sintáctico:
+Error de sintaxis en ';' línea 1
+El código pasó la prueba sintáctica.
+
+Probando código:
+y == input();
+
+Tokens reconocidos:
+LexToken(VARIABLE,'y',1,0)
+LexToken(EQUAL,'==',1,2)
+LexToken(INPUT,'input',1,5)
+LexToken(LPAREN,'(',1,10)
+LexToken(RPAREN,')',1,11)
+LexToken(SEMICOLON,';',1,12)
+
+Análisis Sintáctico:
+Error de sintaxis en '==' línea 1
+El código pasó la prueba sintáctica.
+
+Probando código:
+z = inp();
+
+Tokens reconocidos:
+LexToken(VARIABLE,'z',1,0)
+LexToken(ASSIGN,'=',1,2)
+LexToken(VARIABLE,'inp',1,4)
+LexToken(LPAREN,'(',1,7)
+LexToken(RPAREN,')',1,8)
+LexToken(SEMICOLON,';',1,9)
+
+Análisis Sintáctico:
+Error de sintaxis en 'inp' línea 1
+El código pasó la prueba sintáctica.
+
+Probando código:
+x = input()
+
+Tokens reconocidos:
+LexToken(VARIABLE,'x',1,0)
+LexToken(ASSIGN,'=',1,2)
+LexToken(INPUT,'input',1,4)
+LexToken(LPAREN,'(',1,9)
+LexToken(RPAREN,')',1,10)
+
+Análisis Sintáctico:
+El código pasó la prueba sintáctica.

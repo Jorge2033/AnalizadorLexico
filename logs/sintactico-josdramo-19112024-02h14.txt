@@ -1,0 +1,13 @@
+
+Probando código:
+x = input()
+
+Tokens reconocidos:
+LexToken(VARIABLE,'x',1,0)
+LexToken(ASSIGN,'=',1,2)
+LexToken(INPUT,'input',1,4)
+LexToken(LPAREN,'(',1,9)
+LexToken(RPAREN,')',1,10)
+
+Análisis Sintáctico:
+El código pasó la prueba sintáctica.

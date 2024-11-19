@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEprogram : statementsstatements : statement\n                  | statement statementsstatement : print\n                 | structure_declarationprint : PRINT LPAREN arguments RPAREN SEMICOLONarguments : argument\n                 | argument COMMA argumentsargument : STRING\n                | VARIABLEstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
+_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INPUT INPUT INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEinput : VARIABLE ASSIGN INPUT LPAREN RPARENprogram : statementsstatements : statement\n                  | statement statementsstatement : print\n                | structure_declaration\n                | input \n                | errorprint : PRINT LPAREN arguments RPAREN SEMICOLONarguments : argument\n                 | argument COMMA argumentsargument : STRING\n                | VARIABLEstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
     
-_lr_action_items = {'PRINT':([0,3,4,5,15,19,21,],[6,6,-4,-5,6,-6,-11,]),'CLASS':([0,3,4,5,15,19,21,],[7,7,-4,-5,7,-6,-11,]),'$end':([1,2,3,4,5,8,19,21,],[0,-1,-2,-4,-5,-3,-6,-11,]),'RBRACE':([3,4,5,8,18,19,21,],[-2,-4,-5,-3,21,-6,-11,]),'LPAREN':([6,],[9,]),'VARIABLE':([7,9,17,],[10,14,14,]),'STRING':([9,17,],[13,13,]),'LBRACE':([10,],[15,]),'RPAREN':([11,12,13,14,20,],[16,-7,-9,-10,-8,]),'COMMA':([12,13,14,],[17,-9,-10,]),'SEMICOLON':([16,],[19,]),}
+_lr_action_items = {'VARIABLE':([0,],[2,]),'$end':([1,6,],[0,-1,]),'ASSIGN':([2,],[3,]),'INPUT':([3,],[4,]),'LPAREN':([4,],[5,]),'RPAREN':([5,],[6,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statements':([0,3,15,],[2,8,18,]),'statement':([0,3,15,],[3,3,3,]),'print':([0,3,15,],[4,4,4,]),'structure_declaration':([0,3,15,],[5,5,5,]),'arguments':([9,17,],[11,20,]),'argument':([9,17,],[12,12,]),}
+_lr_goto_items = {'input':([0,],[1,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,16 +26,19 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> program","S'",1,None,None,None),
-  ('program -> statements','program',1,'p_program','main.py',137),
-  ('statements -> statement','statements',1,'p_statements','main.py',141),
-  ('statements -> statement statements','statements',2,'p_statements','main.py',142),
-  ('statement -> print','statement',1,'p_statement','main.py',146),
-  ('statement -> structure_declaration','statement',1,'p_statement','main.py',147),
-  ('print -> PRINT LPAREN arguments RPAREN SEMICOLON','print',5,'p_print','main.py',151),
-  ('arguments -> argument','arguments',1,'p_arguments','main.py',155),
-  ('arguments -> argument COMMA arguments','arguments',3,'p_arguments','main.py',156),
-  ('argument -> STRING','argument',1,'p_argument','main.py',160),
-  ('argument -> VARIABLE','argument',1,'p_argument','main.py',161),
-  ('structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE','structure_declaration',5,'p_structure_declaration','main.py',165),
+  ("S' -> input","S'",1,None,None,None),
+  ('input -> VARIABLE ASSIGN INPUT LPAREN RPAREN','input',5,'p_input','main.py',140),
+  ('program -> statements','program',1,'p_program','main.py',147),
+  ('statements -> statement','statements',1,'p_statements','main.py',151),
+  ('statements -> statement statements','statements',2,'p_statements','main.py',152),
+  ('statement -> print','statement',1,'p_statement','main.py',156),
+  ('statement -> structure_declaration','statement',1,'p_statement','main.py',157),
+  ('statement -> input','statement',1,'p_statement','main.py',158),
+  ('statement -> error','statement',1,'p_statement','main.py',159),
+  ('print -> PRINT LPAREN arguments RPAREN SEMICOLON','print',5,'p_print','main.py',164),
+  ('arguments -> argument','arguments',1,'p_arguments','main.py',168),
+  ('arguments -> argument COMMA arguments','arguments',3,'p_arguments','main.py',169),
+  ('argument -> STRING','argument',1,'p_argument','main.py',173),
+  ('argument -> VARIABLE','argument',1,'p_argument','main.py',174),
+  ('structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE','structure_declaration',5,'p_structure_declaration','main.py',178),
 ]

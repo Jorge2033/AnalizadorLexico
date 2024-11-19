@@ -40,6 +40,7 @@ reserved = {
     'extends': 'EXTENDS',
     'implements': 'IMPLEMENTS',
     'print': 'PRINT',
+    'input': 'INPUT', # Palabra Agregada por José Ramos
 }
 # ------Fin: Jorge Gaibor (Palabras Reservadas) ------
 
@@ -47,7 +48,7 @@ tokens = (
     'VARIABLE', 'NUMBER', 'STRING',
     # ------Inicio: José Ramos (Operadores Aritméticos) ------
     'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
-    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN',
+    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN', 'INPUT',
     # ------Fin: José Ramos (Operadores Aritméticos) ------
     # ------Inicio: José Ramos (Operadores Booleanos) ------
     'EQUAL', 'STRICT_EQUAL', 'NOT_EQUAL',
@@ -132,6 +133,15 @@ def t_error(t):
 lexer = lex.lex()
 # ------Fin: Reglas Léxicas------
 
+# ------Inicio: Reglas Sintácticas por José Ramos ------
+
+# Solicitud de datos por teclado 
+def p_input(p):
+  '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN'''
+  pass
+
+# ------Fin: Reglas Sintácticas por José Ramos ------
+
 # ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
 def p_program(p):
     '''program : statements'''
@@ -143,9 +153,12 @@ def p_statements(p):
     pass
 
 def p_statement(p):
-    '''statement : print
-                 | structure_declaration'''
-    pass
+  '''statement : print
+                | structure_declaration
+                | input 
+                | error'''
+  if len(p) == 2 and p[1] == 'error':
+      print(f"Error en la regla 'statement' cerca de '{p.slice[1].value}' en la línea {p.lineno(1)}")
 
 def p_print(p):
     '''print : PRINT LPAREN arguments RPAREN SEMICOLON'''
@@ -165,18 +178,24 @@ def p_structure_declaration(p):
     '''structure_declaration : CLASS VARIABLE LBRACE statements RBRACE'''
     pass
 
-def p_error(p):
-    if p:
-        print(f"Error de sintaxis en '{p.value}' línea {p.lineno}")
-    else:
-        print("Error de sintaxis en el final del archivo")
 # ------Fin: Reglas Sintácticas por Jorge Gaibor ------
+
+def p_error(p):
+  if p:
+    message = f"Error de sintaxis en '{p.value}' línea {p.lineno}\n"
+    print(message)  
+    log_file.write(message)  
+  else:
+    message = "Error de sintaxis: fin inesperado del archivo\n"
+    print(message)
+    log_file.write(message)
+
 
 # ------Inicio: Reglas Sintácticas por Julio Vivas ------
     def p_condition(p):
         '''condition : IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE'''
         pass
-    
+
     def p_condition_operator(p):
         '''condition_operator : EQUAL
                               | GREATER
@@ -235,21 +254,31 @@ os.makedirs(log_directory, exist_ok=True)
 log_filename = os.path.join(log_directory, f"sintactico-{usuario_git}-{timestamp}.txt")
 
 with open(log_filename, 'w') as log_file:
-    # Analiza los tokens primero
-    lexer.input(prueba_jorge_sintactico)
-    log_file.write("Tokens reconocidos:\n")
-    while True:
-        tok = lexer.token()
-        if not tok:
-            break
-        log_file.write(f"{repr(tok)}\n")  # Escribe el token en el log
 
-    log_file.write("\nAnálisis Sintáctico:\n")
-    try:
-        parser.parse(prueba_jorge_sintactico)
-        log_file.write("Análisis completado sin errores\n")
-    except Exception as e:
-        log_file.write(f"Error durante el análisis: {str(e)}\n")
+    # ------Inicio: Prueba de José Ramos ------
+    prueba_valida = "x = input()"
+    codigo_prueba_1 = "x = input;"
+    codigo_prueba_2 = "y == input();"
+    codigo_prueba_3 = "z = inp();"
+    # ------Fin: Prueba de José Ramos ------
+
+    def probar_codigo(codigo):
+        log_file.write("\nProbando código:\n")
+        log_file.write(codigo + "\n")
+        lexer.input(codigo)
+        log_file.write("\nTokens reconocidos:\n")
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            log_file.write(f"{repr(tok)}\n")
+        log_file.write("\nAnálisis Sintáctico:\n")
+        try:
+            parser.parse(codigo)
+            log_file.write("El código pasó la prueba sintáctica.\n")
+        except Exception as e:
+            log_file.write(f"Error durante el análisis: {str(e)}\n")
+
+    probar_codigo(prueba_valida)
 
 print(f"El análisis léxico y sintáctico se ha guardado en el archivo {log_filename}")
-# ------Fin: Logs de Errores ------

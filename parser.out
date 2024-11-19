@@ -8,6 +8,7 @@ Unused terminals:
     CASE
     CATCH
     COLON
+    CONST
     CONTINUE
     DEFAULT
     DELETE
@@ -16,19 +17,24 @@ Unused terminals:
     DO
     DOT
     ELSE
+    EQUAL
     EXPORT
     EXTENDS
     FINALLY
     FOR
     FROM
     FUNCTION
+    GREATER
     GREATER_EQUAL
+    IF
     IMPLEMENTS
     IMPORT
     IN
     INSTANCEOF
     LBRACKET
+    LESS
     LESS_EQUAL
+    LET
     MINUS
     MINUS_ASSIGN
     MODULO
@@ -52,43 +58,40 @@ Unused terminals:
     THROW
     TRY
     TYPEOF
+    VAR
     VOID
     WHILE
 
 Grammar
 
-Rule 0     S' -> program
-Rule 1     program -> statements
-Rule 2     statements -> statement
-Rule 3     statements -> statement statements
-Rule 4     statement -> print
-Rule 5     statement -> structure_declaration
-Rule 6     print -> PRINT LPAREN arguments RPAREN SEMICOLON
-Rule 7     arguments -> argument
-Rule 8     arguments -> argument COMMA arguments
-Rule 9     argument -> STRING
-Rule 10    argument -> VARIABLE
-Rule 11    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
-Rule 12    condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
-Rule 13    condition_operator -> EQUAL
-Rule 14    condition_operator -> GREATER
-Rule 15    condition_operator -> LESS
-Rule 16    variable_declaration -> LET VARIABLE ASSIGN expression SEMICOLON
-Rule 17    variable_declaration -> CONST VARIABLE ASSIGN expression SEMICOLON
-Rule 18    variable_declaration -> VAR VARIABLE ASSIGN expression SEMICOLON
+Rule 0     S' -> input
+Rule 1     input -> VARIABLE ASSIGN INPUT LPAREN RPAREN
+Rule 2     program -> statements
+Rule 3     statements -> statement
+Rule 4     statements -> statement statements
+Rule 5     statement -> print
+Rule 6     statement -> structure_declaration
+Rule 7     statement -> input
+Rule 8     statement -> error
+Rule 9     print -> PRINT LPAREN arguments RPAREN SEMICOLON
+Rule 10    arguments -> argument
+Rule 11    arguments -> argument COMMA arguments
+Rule 12    argument -> STRING
+Rule 13    argument -> VARIABLE
+Rule 14    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
 
 Terminals, with rules where they appear
 
 AND                  : 
 AS                   : 
-ASSIGN               : 16 17 18
+ASSIGN               : 1
 BREAK                : 
 CASE                 : 
 CATCH                : 
-CLASS                : 11
+CLASS                : 14
 COLON                : 
-COMMA                : 8
-CONST                : 17
+COMMA                : 11
+CONST                : 
 CONTINUE             : 
 DEFAULT              : 
 DELETE               : 
@@ -97,26 +100,27 @@ DIVIDE_ASSIGN        :
 DO                   : 
 DOT                  : 
 ELSE                 : 
-EQUAL                : 13
+EQUAL                : 
 EXPORT               : 
 EXTENDS              : 
 FINALLY              : 
 FOR                  : 
 FROM                 : 
 FUNCTION             : 
-GREATER              : 14
+GREATER              : 
 GREATER_EQUAL        : 
-IF                   : 12
+IF                   : 
 IMPLEMENTS           : 
 IMPORT               : 
 IN                   : 
+INPUT                : 1
 INSTANCEOF           : 
-LBRACE               : 11 12
+LBRACE               : 14
 LBRACKET             : 
-LESS                 : 15
+LESS                 : 
 LESS_EQUAL           : 
-LET                  : 16
-LPAREN               : 6 12
+LET                  : 
+LPAREN               : 1 9
 MINUS                : 
 MINUS_ASSIGN         : 
 MODULO               : 
@@ -130,38 +134,86 @@ NUMBER               :
 OR                   : 
 PLUS                 : 
 PLUS_ASSIGN          : 
-PRINT                : 6
+PRINT                : 9
 QUESTION_MARK        : 
-RBRACE               : 11 12
+RBRACE               : 14
 RBRACKET             : 
 RETURN               : 
-RPAREN               : 6 12
-SEMICOLON            : 6 16 17 18
+RPAREN               : 1 9
+SEMICOLON            : 9
 STRICT_EQUAL         : 
-STRING               : 9
+STRING               : 12
 SUPER                : 
 SWITCH               : 
 THIS                 : 
 THROW                : 
 TRY                  : 
 TYPEOF               : 
-VAR                  : 18
-VARIABLE             : 10 11 16 17 18
+VAR                  : 
+VARIABLE             : 1 13 14
 VOID                 : 
 WHILE                : 
-error                : 
+error                : 8
 
 Nonterminals, with rules where they appear
 
-argument             : 7 8
-arguments            : 6 8
-condition            : 
-condition_operator   : 12
-expression           : 12 12 16 17 18
-print                : 4
-program              : 0
-statement            : 2 3
-statements           : 1 3 11 12
-structure_declaration : 5
-variable_declaration : 
+argument             : 10 11
+arguments            : 9 11
+input                : 7 0
+print                : 5
+program              : 
+statement            : 3 4
+statements           : 2 4 14
+structure_declaration : 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . input
+    (1) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
+
+    VARIABLE        shift and go to state 2
+
+    input                          shift and go to state 1
+
+state 1
+
+    (0) S' -> input .
+
+
+
+state 2
+
+    (1) input -> VARIABLE . ASSIGN INPUT LPAREN RPAREN
+
+    ASSIGN          shift and go to state 3
+
+
+state 3
+
+    (1) input -> VARIABLE ASSIGN . INPUT LPAREN RPAREN
+
+    INPUT           shift and go to state 4
+
+
+state 4
+
+    (1) input -> VARIABLE ASSIGN INPUT . LPAREN RPAREN
+
+    LPAREN          shift and go to state 5
+
+
+state 5
+
+    (1) input -> VARIABLE ASSIGN INPUT LPAREN . RPAREN
+
+    RPAREN          shift and go to state 6
+
+
+state 6
+
+    (1) input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .
+
+    $end            reduce using rule 1 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .)
 
