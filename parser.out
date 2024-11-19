@@ -12,7 +12,6 @@ Unused terminals:
     CONTINUE
     DEFAULT
     DELETE
-    DIVIDE
     DIVIDE_ASSIGN
     DO
     DOT
@@ -35,18 +34,14 @@ Unused terminals:
     LESS
     LESS_EQUAL
     LET
-    MINUS
     MINUS_ASSIGN
     MODULO
     MODULO_ASSIGN
-    MULTIPLY
     MULTIPLY_ASSIGN
     NEW
     NOT
     NOT_EQUAL
-    NUMBER
     OR
-    PLUS
     PLUS_ASSIGN
     QUESTION_MARK
     RBRACKET
@@ -66,19 +61,27 @@ Grammar
 
 Rule 0     S' -> input
 Rule 1     input -> VARIABLE ASSIGN INPUT LPAREN RPAREN
-Rule 2     program -> statements
-Rule 3     statements -> statement
-Rule 4     statements -> statement statements
-Rule 5     statement -> print
-Rule 6     statement -> structure_declaration
-Rule 7     statement -> input
-Rule 8     statement -> error
-Rule 9     print -> PRINT LPAREN arguments RPAREN SEMICOLON
-Rule 10    arguments -> argument
-Rule 11    arguments -> argument COMMA arguments
-Rule 12    argument -> STRING
-Rule 13    argument -> VARIABLE
-Rule 14    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
+Rule 2     expression -> expression PLUS term
+Rule 3     expression -> expression MINUS term
+Rule 4     expression -> term
+Rule 5     term -> term MULTIPLY factor
+Rule 6     term -> term DIVIDE factor
+Rule 7     term -> factor
+Rule 8     factor -> NUMBER
+Rule 9     factor -> VARIABLE
+Rule 10    program -> statements
+Rule 11    statements -> statement
+Rule 12    statements -> statement statements
+Rule 13    statement -> print
+Rule 14    statement -> structure_declaration
+Rule 15    statement -> input
+Rule 16    statement -> error
+Rule 17    print -> PRINT LPAREN arguments RPAREN SEMICOLON
+Rule 18    arguments -> argument
+Rule 19    arguments -> argument COMMA arguments
+Rule 20    argument -> STRING
+Rule 21    argument -> VARIABLE
+Rule 22    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
 
 Terminals, with rules where they appear
 
@@ -88,14 +91,14 @@ ASSIGN               : 1
 BREAK                : 
 CASE                 : 
 CATCH                : 
-CLASS                : 14
+CLASS                : 22
 COLON                : 
-COMMA                : 11
+COMMA                : 19
 CONST                : 
 CONTINUE             : 
 DEFAULT              : 
 DELETE               : 
-DIVIDE               : 
+DIVIDE               : 6
 DIVIDE_ASSIGN        : 
 DO                   : 
 DOT                  : 
@@ -115,34 +118,34 @@ IMPORT               :
 IN                   : 
 INPUT                : 1
 INSTANCEOF           : 
-LBRACE               : 14
+LBRACE               : 22
 LBRACKET             : 
 LESS                 : 
 LESS_EQUAL           : 
 LET                  : 
-LPAREN               : 1 9
-MINUS                : 
+LPAREN               : 1 17
+MINUS                : 3
 MINUS_ASSIGN         : 
 MODULO               : 
 MODULO_ASSIGN        : 
-MULTIPLY             : 
+MULTIPLY             : 5
 MULTIPLY_ASSIGN      : 
 NEW                  : 
 NOT                  : 
 NOT_EQUAL            : 
-NUMBER               : 
+NUMBER               : 8
 OR                   : 
-PLUS                 : 
+PLUS                 : 2
 PLUS_ASSIGN          : 
-PRINT                : 9
+PRINT                : 17
 QUESTION_MARK        : 
-RBRACE               : 14
+RBRACE               : 22
 RBRACKET             : 
 RETURN               : 
-RPAREN               : 1 9
-SEMICOLON            : 9
+RPAREN               : 1 17
+SEMICOLON            : 17
 STRICT_EQUAL         : 
-STRING               : 12
+STRING               : 20
 SUPER                : 
 SWITCH               : 
 THIS                 : 
@@ -150,21 +153,24 @@ THROW                :
 TRY                  : 
 TYPEOF               : 
 VAR                  : 
-VARIABLE             : 1 13 14
+VARIABLE             : 1 9 21 22
 VOID                 : 
 WHILE                : 
-error                : 8
+error                : 16
 
 Nonterminals, with rules where they appear
 
-argument             : 10 11
-arguments            : 9 11
-input                : 7 0
-print                : 5
+argument             : 18 19
+arguments            : 17 19
+expression           : 2 3
+factor               : 5 6 7
+input                : 15 0
+print                : 13
 program              : 
-statement            : 3 4
-statements           : 2 4 14
-structure_declaration : 6
+statement            : 11 12
+statements           : 10 12 22
+structure_declaration : 14
+term                 : 2 3 4 5 6
 
 Parsing method: LALR
 

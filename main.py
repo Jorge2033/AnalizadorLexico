@@ -140,6 +140,24 @@ def p_input(p):
   '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN'''
   pass
 
+#expresiones aritméticas con uno o más operadores
+def p_expression(p):
+  '''expression : expression PLUS term
+                | expression MINUS term
+                | term'''
+  pass
+
+def p_term(p):
+  '''term : term MULTIPLY factor
+          | term DIVIDE factor
+          | factor'''
+  pass
+
+def p_factor(p):
+  '''factor : NUMBER
+            | VARIABLE'''
+  pass
+
 # ------Fin: Reglas Sintácticas por José Ramos ------
 
 # ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
@@ -260,6 +278,11 @@ with open(log_filename, 'w') as log_file:
     codigo_prueba_1 = "x = input;"
     codigo_prueba_2 = "y == input();"
     codigo_prueba_3 = "z = inp();"
+    prueba_codigo_aritmetica = '''
+    let x = 10 + 20 * 3;
+    x = x / 2;
+    y = input();
+    '''
     # ------Fin: Prueba de José Ramos ------
 
     def probar_codigo(codigo):
@@ -279,6 +302,6 @@ with open(log_filename, 'w') as log_file:
         except Exception as e:
             log_file.write(f"Error durante el análisis: {str(e)}\n")
 
-    probar_codigo(prueba_valida)
+    probar_codigo(prueba_codigo_aritmetica)
 
 print(f"El análisis léxico y sintáctico se ha guardado en el archivo {log_filename}")

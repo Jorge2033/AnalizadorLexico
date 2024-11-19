@@ -1,0 +1,35 @@
+
+Probando código:
+
+    let x = 10 + 20 * 3;
+    x = x / 2;
+    y = input();
+    
+
+Tokens reconocidos:
+LexToken(LET,'let',2,5)
+LexToken(VARIABLE,'x',2,9)
+LexToken(ASSIGN,'=',2,11)
+LexToken(NUMBER,10,2,13)
+LexToken(PLUS,'+',2,16)
+LexToken(NUMBER,20,2,18)
+LexToken(MULTIPLY,'*',2,21)
+LexToken(NUMBER,3,2,23)
+LexToken(SEMICOLON,';',2,24)
+LexToken(VARIABLE,'x',3,30)
+LexToken(ASSIGN,'=',3,32)
+LexToken(VARIABLE,'x',3,34)
+LexToken(DIVIDE,'/',3,36)
+LexToken(NUMBER,2,3,38)
+LexToken(SEMICOLON,';',3,39)
+LexToken(VARIABLE,'y',4,45)
+LexToken(ASSIGN,'=',4,47)
+LexToken(INPUT,'input',4,49)
+LexToken(LPAREN,'(',4,54)
+LexToken(RPAREN,')',4,55)
+LexToken(SEMICOLON,';',4,56)
+
+Análisis Sintáctico:
+Error de sintaxis en 'let' línea 6
+Error de sintaxis en ';' línea 8
+El código pasó la prueba sintáctica.
