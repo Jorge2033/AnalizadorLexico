@@ -172,6 +172,28 @@ def p_error(p):
         print("Error de sintaxis en el final del archivo")
 # ------Fin: Reglas Sintácticas por Jorge Gaibor ------
 
+# ------Inicio: Reglas Sintácticas por Julio Vivas ------
+    def p_condition(p):
+        '''condition : IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE'''
+        pass
+    
+    def p_condition_operator(p):
+        '''condition_operator : EQUAL
+                              | GREATER
+                              | LESS'''
+        pass
+
+    def p_variable_declaration(p):
+        '''variable_declaration : LET VARIABLE ASSIGN expression SEMICOLON
+                            | CONST VARIABLE ASSIGN expression SEMICOLON
+                            | VAR VARIABLE ASSIGN expression SEMICOLON'''
+        pass
+
+
+
+
+# ------Fin: Reglas Sintácticas por Julio Vivas ------
+
 parser = yacc.yacc()
 
 # ------Inicio: Prueba de Jorge Gaibor ------
@@ -192,6 +214,17 @@ let auto = new Vehiculo("Toyota", "Corolla");
 auto.mostrarInfo();
 '''
 # ------Fin: Prueba de Jorge Gaibor ------
+
+
+# ------Inicio: Prueba de Julio Vivas ------
+
+# ------Fin: Prueba de Julio Vivas ------
+prueba_julio = '''
+if (x > y) {
+    let resultado = x + y;
+    const mensaje = "Suma completada";
+}
+'''
 
 # ------Inicio: Logs de Errores ------
 usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
