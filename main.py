@@ -1,307 +1,69 @@
-import ply.lex as lex
-import ply.yacc as yacc
-import datetime
-import os
+import tkinter as tk
+from PIL import Image, ImageTk
 
-# ------Inicio: Jorge Gaibor (Palabras Reservadas) ------
-reserved = {
-    'let': 'LET',
-    'const': 'CONST',
-    'var': 'VAR',
-    'function': 'FUNCTION',
-    'return': 'RETURN',
-    'class': 'CLASS',
-    'if': 'IF',
-    'else': 'ELSE',
-    'for': 'FOR',
-    'while': 'WHILE',
-    'do': 'DO',
-    'switch': 'SWITCH',
-    'case': 'CASE',
-    'default': 'DEFAULT',
-    'break': 'BREAK',
-    'continue': 'CONTINUE',
-    'try': 'TRY',
-    'catch': 'CATCH',
-    'finally': 'FINALLY',
-    'throw': 'THROW',
-    'new': 'NEW',
-    'this': 'THIS',
-    'super': 'SUPER',
-    'typeof': 'TYPEOF',
-    'instanceof': 'INSTANCEOF',
-    'in': 'IN',
-    'void': 'VOID',
-    'delete': 'DELETE',
-    'export': 'EXPORT',
-    'import': 'IMPORT',
-    'as': 'AS',
-    'from': 'FROM',
-    'extends': 'EXTENDS',
-    'implements': 'IMPLEMENTS',
-    'print': 'PRINT',
-    'input': 'INPUT', # Palabra Agregada por José Ramos
-}
-# ------Fin: Jorge Gaibor (Palabras Reservadas) ------
+def create_gui():
+    # Crear la ventana principal
+    root = tk.Tk()
+    root.title("Code Analyzer")
+    root.configure(bg="#2C3E50")
+    
+    # Configurar el tamaño inicial y permitir redimensionamiento
+    root.geometry("800x600")
+    root.grid_columnconfigure(0, weight=1)  # Permitir que la columna 0 se ajuste
+    root.grid_columnconfigure(1, weight=1)  # Permitir que la columna 1 se ajuste
+    root.grid_rowconfigure(0, weight=1)     # Permitir que la fila se ajuste
 
-tokens = (
-    'VARIABLE', 'NUMBER', 'STRING',
-    # ------Inicio: José Ramos (Operadores Aritméticos) ------
-    'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
-    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN', 'INPUT',
-    # ------Fin: José Ramos (Operadores Aritméticos) ------
-    # ------Inicio: José Ramos (Operadores Booleanos) ------
-    'EQUAL', 'STRICT_EQUAL', 'NOT_EQUAL',
-    'GREATER', 'LESS', 'GREATER_EQUAL', 'LESS_EQUAL',
-    'AND', 'OR', 'NOT',
-    # ------Fin: José Ramos (Operadores Booleanos) ------
-    # ------Inicio: Jorge Gaibor (Delimitadores) ------
-    'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LBRACKET', 'RBRACKET',
-    'SEMICOLON', 'COMMA', 'DOT', 'COLON', 'QUESTION_MARK',
-    # ------Fin: Jorge Gaibor (Delimitadores) ------
-    # ------Inicio: Julio Vivas (Tipos de Variables) ------
-    'ASSIGN'
-    # ------Fin: Julio Vivas (Tipos de Variables) ------
-) + tuple(reserved.values())
+    # Crear un marco principal para contener todo
+    main_frame = tk.Frame(root, bg="#2C3E50")
+    main_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
-# ------Inicio: José Ramos (Expresiones Regulares Operadores Aritméticos) ------
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_MULTIPLY = r'\*'
-t_DIVIDE = r'/'
-t_MODULO = r'%'
-t_PLUS_ASSIGN = r'\+='
-t_MINUS_ASSIGN = r'-='
-t_MULTIPLY_ASSIGN = r'\*='
-t_DIVIDE_ASSIGN = r'/='
-t_MODULO_ASSIGN = r'%='
-# ------Fin: José Ramos (Expresiones Regulares Operadores Aritméticos) ------
+    # Configurar encabezado
+    header = tk.Frame(main_frame, bg="#3498DB")
+    header.grid(row=0, column=0, columnspan=2, sticky="ew")
+    header.grid_columnconfigure(0, weight=1)
 
-# ------Inicio: Jorge Gaibor (Delimitadores) ------
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LBRACE = r'\{'
-t_RBRACE = r'\}'
-t_LBRACKET = r'\['
-t_RBRACKET = r'\]'
-t_SEMICOLON = r';'
-t_COMMA = r','
-t_DOT = r'\.'
-t_COLON = r':'
-t_QUESTION_MARK = r'\?'
-# ------Fin: Jorge Gaibor (Delimitadores) ------
+    # Añadir el logo y el título al encabezado
+    logo_image = Image.open("typescript_logo.png")
+    logo_image = logo_image.resize((30, 30), Image.LANCZOS)
+    logo = ImageTk.PhotoImage(logo_image)
 
-# ------Inicio: José Ramos (Expresiones Regulares Operadores Booleanos) ------
-t_EQUAL = r'=='
-t_STRICT_EQUAL = r'==='
-t_NOT_EQUAL = r'!='
-t_GREATER = r'>'
-t_LESS = r'<'
-t_GREATER_EQUAL = r'>='
-t_LESS_EQUAL = r'<='
-t_AND = r'&&'
-t_OR = r'\|\|'
-t_NOT = r'!'
-# ------Fin: José Ramos (Expresiones Regulares Operadores Booleanos) ------
+    logo_label = tk.Label(header, image=logo, bg="#3498DB")
+    logo_label.image = logo  # Mantener una referencia de la imagen
+    logo_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
-# ------Inicio: Julio Vivas (Expresiones Regulares Tipos de Variables) ------
-t_ASSIGN = r'='
-# ------Fin: Julio Vivas (Expresiones Regulares Tipos de Variables) ------
+    title_label = tk.Label(header, text="TypeScript Code Analyzer", font=("Arial", 16, "bold"), fg="white", bg="#3498DB")
+    title_label.grid(row=0, column=1, sticky="w")
 
-t_STRING = r'\".*?\"'
+    # Añadir botón "Run"
+    run_button = tk.Button(header, text="RUN ▶", bg="green", fg="white", font=("Arial", 12, "bold"), relief="flat", command=lambda: print("Run clicked"))
+    run_button.grid(row=0, column=2, padx=10, pady=5, sticky="e")
 
-def t_NUMBER(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
+    # Configurar área de código y consola
+    code_frame = tk.Frame(main_frame, bg="#ECF0F1")
+    code_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+    console_frame = tk.Frame(main_frame, bg="#ECF0F1")
+    console_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
 
-def t_VARIABLE(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'VARIABLE')  # Verifica si es una palabra reservada
-    return t
+    main_frame.grid_rowconfigure(1, weight=1)  # Permitir que el área de código/consola se ajuste
+    main_frame.grid_columnconfigure(0, weight=1)  # Ajustar ancho del área de código
+    main_frame.grid_columnconfigure(1, weight=1)  # Ajustar ancho del área de consola
 
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+    # Añadir widget de texto para código
+    code_text = tk.Text(code_frame, wrap=tk.WORD, bg="white", fg="black")
+    code_text.pack(expand=True, fill="both", padx=5, pady=5)
 
-t_ignore = ' \t'
+    # Añadir etiqueta y consola
+    console_label = tk.Label(console_frame, text="Console", bg="#ECF0F1", fg="#2C3E50", font=("Arial", 12, "bold"))
+    console_label.pack(anchor="nw", padx=5, pady=5)
 
-def t_error(t):
-    print(f"Token no admitido '{t.value[0]}' en la línea {t.lineno}")
-    t.lexer.skip(1)
+    console_text = tk.Text(console_frame, wrap=tk.WORD, bg="white", fg="black", state=tk.DISABLED)
+    console_text.pack(expand=True, fill="both", padx=5, pady=5)
 
-lexer = lex.lex()
-# ------Fin: Reglas Léxicas------
+    # Añadir footer
+    footer = tk.Label(main_frame, text="Version Alpha 1.0", bg="#2C3E50", fg="white", anchor="w", font=("Arial", 10))
+    footer.grid(row=2, column=0, columnspan=2, sticky="ew")
 
-# ------Inicio: Reglas Sintácticas por José Ramos ------
+    # Ejecutar la ventana
+    root.mainloop()
 
-# Solicitud de datos por teclado 
-def p_input(p):
-  '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN'''
-  pass
-
-#expresiones aritméticas con uno o más operadores
-def p_expression(p):
-  '''expression : expression PLUS term
-                | expression MINUS term
-                | term'''
-  pass
-
-def p_term(p):
-  '''term : term MULTIPLY factor
-          | term DIVIDE factor
-          | factor'''
-  pass
-
-def p_factor(p):
-  '''factor : NUMBER
-            | VARIABLE'''
-  pass
-
-# ------Fin: Reglas Sintácticas por José Ramos ------
-
-# ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
-def p_program(p):
-    '''program : statements'''
-    pass
-
-def p_statements(p):
-    '''statements : statement
-                  | statement statements'''
-    pass
-
-def p_statement(p):
-  '''statement : print
-                | structure_declaration
-                | input 
-                | error'''
-  if len(p) == 2 and p[1] == 'error':
-      print(f"Error en la regla 'statement' cerca de '{p.slice[1].value}' en la línea {p.lineno(1)}")
-
-def p_print(p):
-    '''print : PRINT LPAREN arguments RPAREN SEMICOLON'''
-    pass
-
-def p_arguments(p):
-    '''arguments : argument
-                 | argument COMMA arguments'''
-    pass
-
-def p_argument(p):
-    '''argument : STRING
-                | VARIABLE'''
-    pass
-
-def p_structure_declaration(p):
-    '''structure_declaration : CLASS VARIABLE LBRACE statements RBRACE'''
-    pass
-
-# ------Fin: Reglas Sintácticas por Jorge Gaibor ------
-
-def p_error(p):
-  if p:
-    message = f"Error de sintaxis en '{p.value}' línea {p.lineno}\n"
-    print(message)  
-    log_file.write(message)  
-  else:
-    message = "Error de sintaxis: fin inesperado del archivo\n"
-    print(message)
-    log_file.write(message)
-
-
-# ------Inicio: Reglas Sintácticas por Julio Vivas ------
-    def p_condition(p):
-        '''condition : IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE'''
-        pass
-
-    def p_condition_operator(p):
-        '''condition_operator : EQUAL
-                              | GREATER
-                              | LESS'''
-        pass
-
-    def p_variable_declaration(p):
-        '''variable_declaration : LET VARIABLE ASSIGN expression SEMICOLON
-                            | CONST VARIABLE ASSIGN expression SEMICOLON
-                            | VAR VARIABLE ASSIGN expression SEMICOLON'''
-        pass
-
-
-
-
-# ------Fin: Reglas Sintácticas por Julio Vivas ------
-
-parser = yacc.yacc()
-
-# ------Inicio: Prueba de Jorge Gaibor ------
-prueba_jorge_sintactico = '''
-print("Inicio del programa");
-class Vehiculo {
-    constructor(marca, modelo) {
-        this.marca = marca;
-        this.modelo = modelo;
-    }
-
-    mostrarInfo() {
-        print("Marca: " + this.marca + ", Modelo: " + this.modelo);
-    }
-}
-
-let auto = new Vehiculo("Toyota", "Corolla");
-auto.mostrarInfo();
-'''
-# ------Fin: Prueba de Jorge Gaibor ------
-
-
-# ------Inicio: Prueba de Julio Vivas ------
-
-# ------Fin: Prueba de Julio Vivas ------
-prueba_julio = '''
-if (x > y) {
-    let resultado = x + y;
-    const mensaje = "Suma completada";
-}
-'''
-
-# ------Inicio: Logs de Errores ------
-usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
-timestamp = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
-log_directory = "logs"
-os.makedirs(log_directory, exist_ok=True)
-
-log_filename = os.path.join(log_directory, f"sintactico-{usuario_git}-{timestamp}.txt")
-
-with open(log_filename, 'w') as log_file:
-
-    # ------Inicio: Prueba de José Ramos ------
-    prueba_valida = "x = input()"
-    codigo_prueba_1 = "x = input;"
-    codigo_prueba_2 = "y == input();"
-    codigo_prueba_3 = "z = inp();"
-    prueba_codigo_aritmetica = '''
-    let x = 10 + 20 * 3;
-    x = x / 2;
-    y = input();
-    '''
-    # ------Fin: Prueba de José Ramos ------
-
-    def probar_codigo(codigo):
-        log_file.write("\nProbando código:\n")
-        log_file.write(codigo + "\n")
-        lexer.input(codigo)
-        log_file.write("\nTokens reconocidos:\n")
-        while True:
-            tok = lexer.token()
-            if not tok:
-                break
-            log_file.write(f"{repr(tok)}\n")
-        log_file.write("\nAnálisis Sintáctico:\n")
-        try:
-            parser.parse(codigo)
-            log_file.write("El código pasó la prueba sintáctica.\n")
-        except Exception as e:
-            log_file.write(f"Error durante el análisis: {str(e)}\n")
-
-    probar_codigo(prueba_codigo_aritmetica)
-
-print(f"El análisis léxico y sintáctico se ha guardado en el archivo {log_filename}")
+create_gui()
