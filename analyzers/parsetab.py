@@ -6,7 +6,7 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INPUT INPUT INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEinput : VARIABLE ASSIGN INPUT LPAREN RPARENexpression : expression PLUS term\n                | expression MINUS term\n                | termterm : term MULTIPLY factor\n          | term DIVIDE factor\n          | factorfactor : NUMBER\n            | VARIABLEprogram : statementsstatements : statement\n                  | statement statementsstatement : print\n                | structure_declaration\n                | input \n                | errorprint : PRINT LPAREN arguments RPAREN SEMICOLONarguments : argument\n                 | argument COMMA argumentsargument : STRING\n                | VARIABLEstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
+_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INPUT INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEinput : VARIABLE ASSIGN INPUT LPAREN RPARENexpression : expression PLUS term\n| expression MINUS term\n| termterm : term MULTIPLY factor\n| term DIVIDE factor\n| factorfactor : NUMBER\n| VARIABLEprogram : statementsstatements : statement\n| statement statementsstatement : print\n| structure_declaration\n| input \n| errorprint : PRINT LPAREN arguments RPAREN SEMICOLONarguments : argument\n| argument COMMA argumentsargument : STRING\n| VARIABLEstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
     
 _lr_action_items = {'VARIABLE':([0,],[2,]),'$end':([1,6,],[0,-1,]),'ASSIGN':([2,],[3,]),'INPUT':([3,],[4,]),'LPAREN':([4,],[5,]),'RPAREN':([5,],[6,]),}
 
@@ -27,26 +27,26 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> input","S'",1,None,None,None),
-  ('input -> VARIABLE ASSIGN INPUT LPAREN RPAREN','input',5,'p_input','main.py',140),
-  ('expression -> expression PLUS term','expression',3,'p_expression','main.py',145),
-  ('expression -> expression MINUS term','expression',3,'p_expression','main.py',146),
-  ('expression -> term','expression',1,'p_expression','main.py',147),
-  ('term -> term MULTIPLY factor','term',3,'p_term','main.py',151),
-  ('term -> term DIVIDE factor','term',3,'p_term','main.py',152),
-  ('term -> factor','term',1,'p_term','main.py',153),
-  ('factor -> NUMBER','factor',1,'p_factor','main.py',157),
-  ('factor -> VARIABLE','factor',1,'p_factor','main.py',158),
-  ('program -> statements','program',1,'p_program','main.py',165),
-  ('statements -> statement','statements',1,'p_statements','main.py',169),
-  ('statements -> statement statements','statements',2,'p_statements','main.py',170),
-  ('statement -> print','statement',1,'p_statement','main.py',174),
-  ('statement -> structure_declaration','statement',1,'p_statement','main.py',175),
-  ('statement -> input','statement',1,'p_statement','main.py',176),
-  ('statement -> error','statement',1,'p_statement','main.py',177),
-  ('print -> PRINT LPAREN arguments RPAREN SEMICOLON','print',5,'p_print','main.py',182),
-  ('arguments -> argument','arguments',1,'p_arguments','main.py',186),
-  ('arguments -> argument COMMA arguments','arguments',3,'p_arguments','main.py',187),
-  ('argument -> STRING','argument',1,'p_argument','main.py',191),
-  ('argument -> VARIABLE','argument',1,'p_argument','main.py',192),
-  ('structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE','structure_declaration',5,'p_structure_declaration','main.py',196),
+  ('input -> VARIABLE ASSIGN INPUT LPAREN RPAREN','input',5,'p_input','syntax_analyzer.py',12),
+  ('expression -> expression PLUS term','expression',3,'p_expression','syntax_analyzer.py',17),
+  ('expression -> expression MINUS term','expression',3,'p_expression','syntax_analyzer.py',18),
+  ('expression -> term','expression',1,'p_expression','syntax_analyzer.py',19),
+  ('term -> term MULTIPLY factor','term',3,'p_term','syntax_analyzer.py',23),
+  ('term -> term DIVIDE factor','term',3,'p_term','syntax_analyzer.py',24),
+  ('term -> factor','term',1,'p_term','syntax_analyzer.py',25),
+  ('factor -> NUMBER','factor',1,'p_factor','syntax_analyzer.py',29),
+  ('factor -> VARIABLE','factor',1,'p_factor','syntax_analyzer.py',30),
+  ('program -> statements','program',1,'p_program','syntax_analyzer.py',37),
+  ('statements -> statement','statements',1,'p_statements','syntax_analyzer.py',41),
+  ('statements -> statement statements','statements',2,'p_statements','syntax_analyzer.py',42),
+  ('statement -> print','statement',1,'p_statement','syntax_analyzer.py',46),
+  ('statement -> structure_declaration','statement',1,'p_statement','syntax_analyzer.py',47),
+  ('statement -> input','statement',1,'p_statement','syntax_analyzer.py',48),
+  ('statement -> error','statement',1,'p_statement','syntax_analyzer.py',49),
+  ('print -> PRINT LPAREN arguments RPAREN SEMICOLON','print',5,'p_print','syntax_analyzer.py',54),
+  ('arguments -> argument','arguments',1,'p_arguments','syntax_analyzer.py',58),
+  ('arguments -> argument COMMA arguments','arguments',3,'p_arguments','syntax_analyzer.py',59),
+  ('argument -> STRING','argument',1,'p_argument','syntax_analyzer.py',63),
+  ('argument -> VARIABLE','argument',1,'p_argument','syntax_analyzer.py',64),
+  ('structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE','structure_declaration',5,'p_structure_declaration','syntax_analyzer.py',68),
 ]

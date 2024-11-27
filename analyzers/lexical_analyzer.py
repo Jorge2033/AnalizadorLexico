@@ -46,7 +46,7 @@ tokens = (
     'VARIABLE', 'NUMBER', 'STRING',
     # ------Inicio: José Ramos (Operadores Aritméticos) ------
     'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
-    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN', 'INPUT',
+    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN',
     # ------Fin: José Ramos (Operadores Aritméticos) ------
     # ------Inicio: José Ramos (Operadores Booleanos) ------
     'EQUAL', 'STRICT_EQUAL', 'NOT_EQUAL',

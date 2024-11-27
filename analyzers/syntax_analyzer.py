@@ -70,16 +70,6 @@ def p_structure_declaration(p):
 
 # ------Fin: Reglas Sintácticas por Jorge Gaibor ------
 
-def p_error(p):
-  if p:
-    message = f"Error de sintaxis en '{p.value}' línea {p.lineno}\n"
-    print(message)  
-    log_file.write(message)  
-  else:
-    message = "Error de sintaxis: fin inesperado del archivo\n"
-    print(message)
-    log_file.write(message)
-
 
 # ------Inicio: Reglas Sintácticas por Julio Vivas ------
     def p_condition(p):
@@ -102,6 +92,16 @@ def p_error(p):
 
 
 # ------Fin: Reglas Sintácticas por Julio Vivas ------
+
+def p_error(p):
+  if p:
+    message = f"Error de sintaxis en '{p.value}' línea {p.lineno}\n"
+    print(message)  
+    log_file.write(message)  
+  else:
+    message = "Error de sintaxis: fin inesperado del archivo\n"
+    print(message)
+    log_file.write(message)
 
 parser = yacc.yacc()
 
@@ -135,45 +135,22 @@ if (x > y) {
 }
 '''
 
-# ------Inicio: Logs de Errores ------
-usuario_git = input("Por favor, ingresa tu nombre de usuario: ")
-timestamp = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
-log_directory = "logs"
-os.makedirs(log_directory, exist_ok=True)
+def capture_semantic_errors(input_code):
+    log_directory = "logs/semantic/"
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
 
-log_filename = os.path.join(log_directory, f"sintactico-{usuario_git}-{timestamp}.txt")
+    log_filename = f"semantic-(modificarNombre)-{datetime.datetime.now().strftime('%Y%m%d-%Hh%M')}.txt"
+    log_filepath = os.path.join(log_directory, log_filename)
 
-with open(log_filename, 'w') as log_file:
-
-    # ------Inicio: Prueba de José Ramos ------
-    prueba_valida = "x = input()"
-    codigo_prueba_1 = "x = input;"
-    codigo_prueba_2 = "y == input();"
-    codigo_prueba_3 = "z = inp();"
-    prueba_codigo_aritmetica = '''
-    let x = 10 + 20 * 3;
-    x = x / 2;
-    y = input();
-    '''
-    # ------Fin: Prueba de José Ramos ------
-
-    def probar_codigo(codigo):
-        log_file.write("\nProbando código:\n")
-        log_file.write(codigo + "\n")
-        lexer.input(codigo)
-        log_file.write("\nTokens reconocidos:\n")
-        while True:
-            tok = lexer.token()
-            if not tok:
-                break
-            log_file.write(f"{repr(tok)}\n")
-        log_file.write("\nAnálisis Sintáctico:\n")
-        try:
-            parser.parse(codigo)
-            log_file.write("El código pasó la prueba sintáctica.\n")
-        except Exception as e:
-            log_file.write(f"Error durante el análisis: {str(e)}\n")
-
-    probar_codigo(prueba_codigo_aritmetica)
-
-print(f"El análisis léxico y sintáctico se ha guardado en el archivo {log_filename}")
+    with open(log_filepath, "w") as f:
+        sys.stdout = f
+        lines = input_code.strip().split('\n')
+        for line_num, line in enumerate(lines, start=1):
+            try:
+                parser.parse(line)
+            except Exception as e:
+                print(f"Error en línea {line_num}: {e}")
+        sys.stdout = sys.__stdout__
+    
+    print("Análisis completado. Los errores semánticos se han guardado en el archivo de registro:", log_filename)

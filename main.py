@@ -1,69 +1,104 @@
 import tkinter as tk
 from PIL import Image, ImageTk
+import analyzers.lexical_analyzer as lexical
+import analyzers.syntax_analyzer as syntax
+import sys
+import ply.yacc as yacc
 
-def create_gui():
-    # Crear la ventana principal
-    root = tk.Tk()
-    root.title("Code Analyzer")
-    root.configure(bg="#2C3E50")
+
+class TextComponent:
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+
+    def write(self, string):
+        self.text_widget.config(state=tk.NORMAL)  # Habilitar escritura
+        self.text_widget.insert(tk.END, string)
+        self.text_widget.see(tk.END)
+        self.text_widget.config(state=tk.DISABLED)  # Deshabilitar escritura
+
+def run_TypeScript(text_input):
+    console_text.config(state=tk.NORMAL)  # Habilitar escritura en la consola
+    console_text.delete(1.0, tk.END) 
+    sys.stdout = TextComponent(console_text)
+    lexical.lexer.input(text_input)
+    try:
+        for token in lexical.lexer:
+            print(token)
+        lexical.lexer.lineno = 1
+        syntax.parser.parse(text_input)
+        lexical.lexer.lineno = 1
+    except Exception as e:
+        print(f"Error: {e}")
+
+    sys.stdout = sys.__stdout__  # Restaurar sys.stdout original
+    console_text.config(state=tk.DISABLED)  # Deshabilitar escritura en la consola
+
+# Función para el botón "Run"
+def on_run():
+    input_text_content = code_text.get(1.0, tk.END)
+    run_TypeScript(input_text_content)
+
+
+# Crear la ventana principal
+root = tk.Tk()
+root.title("TypeScript Analyzer")
+root.configure(bg="#2C3E50")
     
-    # Configurar el tamaño inicial y permitir redimensionamiento
-    root.geometry("800x600")
-    root.grid_columnconfigure(0, weight=1)  # Permitir que la columna 0 se ajuste
-    root.grid_columnconfigure(1, weight=1)  # Permitir que la columna 1 se ajuste
-    root.grid_rowconfigure(0, weight=1)     # Permitir que la fila se ajuste
+# Configurar el tamaño inicial y permitir redimensionamiento
+root.geometry("800x600")
+root.grid_columnconfigure(0, weight=1)  # Permitir que la columna 0 se ajuste
+root.grid_columnconfigure(1, weight=1)  # Permitir que la columna 1 se ajuste
+root.grid_rowconfigure(0, weight=1)     # Permitir que la fila se ajuste
 
-    # Crear un marco principal para contener todo
-    main_frame = tk.Frame(root, bg="#2C3E50")
-    main_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
+# Crear un marco principal para contener todo
+main_frame = tk.Frame(root, bg="#2C3E50")
+main_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 
-    # Configurar encabezado
-    header = tk.Frame(main_frame, bg="#3498DB")
-    header.grid(row=0, column=0, columnspan=2, sticky="ew")
-    header.grid_columnconfigure(0, weight=1)
+# Configurar encabezado
+header = tk.Frame(main_frame, bg="#3498DB")
+header.grid(row=0, column=0, columnspan=2, sticky="ew")
+header.grid_columnconfigure(0, weight=1)
 
-    # Añadir el logo y el título al encabezado
-    logo_image = Image.open("typescript_logo.png")
-    logo_image = logo_image.resize((30, 30), Image.LANCZOS)
-    logo = ImageTk.PhotoImage(logo_image)
+# Añadir el logo y el título al encabezado
+logo_image = Image.open("typescript_logo.png")
+logo_image = logo_image.resize((30, 30), Image.LANCZOS)
+logo = ImageTk.PhotoImage(logo_image)
 
-    logo_label = tk.Label(header, image=logo, bg="#3498DB")
-    logo_label.image = logo  # Mantener una referencia de la imagen
-    logo_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+logo_label = tk.Label(header, image=logo, bg="#3498DB")
+logo_label.image = logo  # Mantener una referencia de la imagen
+logo_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
 
-    title_label = tk.Label(header, text="TypeScript Code Analyzer", font=("Arial", 16, "bold"), fg="white", bg="#3498DB")
-    title_label.grid(row=0, column=1, sticky="w")
+title_label = tk.Label(header, text="TypeScript Code Analyzer", font=("Arial", 16, "bold"), fg="white", bg="#3498DB")
+title_label.grid(row=0, column=1, sticky="w")
 
-    # Añadir botón "Run"
-    run_button = tk.Button(header, text="RUN ▶", bg="green", fg="white", font=("Arial", 12, "bold"), relief="flat", command=lambda: print("Run clicked"))
-    run_button.grid(row=0, column=2, padx=10, pady=5, sticky="e")
+# Añadir botón "Run"
+run_button = tk.Button(header, text="RUN ▶", bg="green", fg="white", font=("Arial", 12, "bold"), relief="flat", command=on_run)
+run_button.grid(row=0, column=2, padx=10, pady=5, sticky="e")
 
-    # Configurar área de código y consola
-    code_frame = tk.Frame(main_frame, bg="#ECF0F1")
-    code_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
-    console_frame = tk.Frame(main_frame, bg="#ECF0F1")
-    console_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
+# Configurar área de código y consola
+code_frame = tk.Frame(main_frame, bg="#ECF0F1")
+code_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+console_frame = tk.Frame(main_frame, bg="#ECF0F1")
+console_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
 
-    main_frame.grid_rowconfigure(1, weight=1)  # Permitir que el área de código/consola se ajuste
-    main_frame.grid_columnconfigure(0, weight=1)  # Ajustar ancho del área de código
-    main_frame.grid_columnconfigure(1, weight=1)  # Ajustar ancho del área de consola
+main_frame.grid_rowconfigure(1, weight=1)  # Permitir que el área de código/consola se ajuste
+main_frame.grid_columnconfigure(0, weight=1)  # Ajustar ancho del área de código
+main_frame.grid_columnconfigure(1, weight=1)  # Ajustar ancho del área de consola
 
-    # Añadir widget de texto para código
-    code_text = tk.Text(code_frame, wrap=tk.WORD, bg="white", fg="black")
-    code_text.pack(expand=True, fill="both", padx=5, pady=5)
+# Añadir widget de texto para código
+code_text = tk.Text(code_frame, wrap=tk.WORD, bg="white", fg="black")
+code_text.pack(expand=True, fill="both", padx=5, pady=5)
 
-    # Añadir etiqueta y consola
-    console_label = tk.Label(console_frame, text="Console", bg="#ECF0F1", fg="#2C3E50", font=("Arial", 12, "bold"))
-    console_label.pack(anchor="nw", padx=5, pady=5)
+# Añadir etiqueta y consola
+console_label = tk.Label(console_frame, text="Console", bg="#ECF0F1", fg="#2C3E50", font=("Arial", 12, "bold"))
+console_label.pack(anchor="nw", padx=5, pady=5)
 
-    console_text = tk.Text(console_frame, wrap=tk.WORD, bg="white", fg="black", state=tk.DISABLED)
-    console_text.pack(expand=True, fill="both", padx=5, pady=5)
+console_text = tk.Text(console_frame, wrap=tk.WORD, bg="white", fg="black", state=tk.DISABLED)
+console_text.pack(expand=True, fill="both", padx=5, pady=5)
 
-    # Añadir footer
-    footer = tk.Label(main_frame, text="Version Alpha 1.0", bg="#2C3E50", fg="white", anchor="w", font=("Arial", 10))
-    footer.grid(row=2, column=0, columnspan=2, sticky="ew")
+# Añadir footer
+footer = tk.Label(main_frame, text="Version Alpha 1.0", bg="#2C3E50", fg="white", anchor="w", font=("Arial", 10))
+footer.grid(row=2, column=0, columnspan=2, sticky="ew")
 
-    # Ejecutar la ventana
-    root.mainloop()
-
-create_gui()
+# Ejecutar la ventana
+root.mainloop()
