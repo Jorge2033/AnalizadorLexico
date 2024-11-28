@@ -38,7 +38,9 @@ reserved = {
     'extends': 'EXTENDS',
     'implements': 'IMPLEMENTS',
     'print': 'PRINT',
-    'input': 'INPUT', # Palabra Agregada por José Ramos
+    'input': 'INPUT', 
+    'console': 'CONSOLE',
+    'log': 'LOG',
 }
 # ------Fin: Jorge Gaibor (Palabras Reservadas) ------
 
@@ -46,7 +48,7 @@ tokens = (
     'VARIABLE', 'NUMBER', 'STRING',
     # ------Inicio: José Ramos (Operadores Aritméticos) ------
     'PLUS', 'MINUS', 'MULTIPLY', 'DIVIDE', 'MODULO',
-    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN',
+    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULTIPLY_ASSIGN', 'DIVIDE_ASSIGN', 'MODULO_ASSIGN', 'DOT',
     # ------Fin: José Ramos (Operadores Aritméticos) ------
     # ------Inicio: José Ramos (Operadores Booleanos) ------
     'EQUAL', 'STRICT_EQUAL', 'NOT_EQUAL',
@@ -73,6 +75,8 @@ t_MINUS_ASSIGN = r'-='
 t_MULTIPLY_ASSIGN = r'\*='
 t_DIVIDE_ASSIGN = r'/='
 t_MODULO_ASSIGN = r'%='
+
+
 # ------Fin: José Ramos (Expresiones Regulares Operadores Aritméticos) ------
 
 # ------Inicio: Jorge Gaibor (Delimitadores) ------
@@ -106,10 +110,10 @@ t_NOT = r'!'
 t_ASSIGN = r'='
 # ------Fin: Julio Vivas (Expresiones Regulares Tipos de Variables) ------
 
-t_STRING = r'\".*?\"'
+t_STRING = r'\"([^\\\n]|(\\.))*?\"'
 
 def t_NUMBER(t):
-    r'\d+'
+    r'\d+(\.\d+)?'
     t.value = int(t.value)
     return t
 
@@ -121,6 +125,11 @@ def t_VARIABLE(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+
+def t_CONSOLE_LOG(t):
+    r'console\.log'
+    t.type = 'CONSOLE_LOG'
+    return t
 
 t_ignore = ' \t'
 
