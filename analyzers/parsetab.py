@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONSOLE CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INPUT INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LOG LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEprogram : statementsstatements : statement\n| statements statementstatement : print\n| structure_declaration\n| input \n| error\n| conditionprint : CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLONinput : VARIABLE ASSIGN INPUT LPAREN RPARENexpression : STRING\n| VARIABLE\n| NUMBER\n| expression PLUS expressionterm : term MULTIPLY factor\n| term DIVIDE factor\n| factorfactor : NUMBER\n| VARIABLEcondition : IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACEcondition_operator : EQUAL\n| GREATER\n| LESSarguments : argument\n| argument COMMA argumentsargument : STRING\n| VARIABLE\n| NUMBERstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
+_lr_signature = 'AND AS ASSIGN BREAK CASE CATCH CLASS COLON COMMA CONSOLE CONST CONTINUE DEFAULT DELETE DIVIDE DIVIDE_ASSIGN DO DOT ELSE EQUAL EXPORT EXTENDS FINALLY FOR FROM FUNCTION GREATER GREATER_EQUAL IF IMPLEMENTS IMPORT IN INPUT INSTANCEOF LBRACE LBRACKET LESS LESS_EQUAL LET LOG LPAREN MINUS MINUS_ASSIGN MODULO MODULO_ASSIGN MULTIPLY MULTIPLY_ASSIGN NEW NOT NOT_EQUAL NUMBER OR PLUS PLUS_ASSIGN PRINT QUESTION_MARK RBRACE RBRACKET RETURN RPAREN SEMICOLON STRICT_EQUAL STRING SUPER SWITCH THIS THROW TRY TYPEOF VAR VARIABLE VOID WHILEprogram : statementsstatements : statement\n| statements statementstatement : print\n| structure_declaration\n| input \n| error\n| conditionprint : CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLONinput : VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON\n| VARIABLE ASSIGN INPUT LPAREN RPAREN expression : STRING\n| VARIABLE\n| NUMBER\n| expression PLUS expressionterm : term MULTIPLY factor\n| term DIVIDE factor\n| factorfactor : NUMBER\n| VARIABLEcondition : IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACEcondition_operator : EQUAL\n| GREATER\n| LESSarguments : argument\n| argument COMMA argumentsargument : STRING\n| VARIABLE\n| NUMBERstructure_declaration : CLASS VARIABLE LBRACE statements RBRACE'
     
-_lr_action_items = {'error':([0,2,3,4,5,6,7,8,13,19,26,38,39,45,47,48,49,],[7,7,-2,-4,-5,-6,-7,-8,-3,7,7,-29,-10,-9,7,7,-20,]),'CONSOLE':([0,2,3,4,5,6,7,8,13,19,26,38,39,45,47,48,49,],[9,9,-2,-4,-5,-6,-7,-8,-3,9,9,-29,-10,-9,9,9,-20,]),'CLASS':([0,2,3,4,5,6,7,8,13,19,26,38,39,45,47,48,49,],[10,10,-2,-4,-5,-6,-7,-8,-3,10,10,-29,-10,-9,10,10,-20,]),'VARIABLE':([0,2,3,4,5,6,7,8,10,13,17,19,25,26,28,29,30,31,32,38,39,43,45,47,48,49,],[11,11,-2,-4,-5,-6,-7,-8,15,-3,23,11,36,11,23,23,-21,-22,-23,-29,-10,36,-9,11,11,-20,]),'IF':([0,2,3,4,5,6,7,8,13,19,26,38,39,45,47,48,49,],[12,12,-2,-4,-5,-6,-7,-8,-3,12,12,-29,-10,-9,12,12,-20,]),'$end':([1,2,3,4,5,6,7,8,13,38,39,45,49,],[0,-1,-2,-4,-5,-6,-7,-8,-3,-29,-10,-9,-20,]),'RBRACE':([3,4,5,6,7,8,13,26,38,39,45,48,49,],[-2,-4,-5,-6,-7,-8,-3,38,-29,-10,-9,49,-20,]),'DOT':([9,],[14,]),'ASSIGN':([11,],[16,]),'LPAREN':([12,18,20,],[17,25,27,]),'LOG':([14,],[18,]),'LBRACE':([15,44,],[19,47,]),'INPUT':([16,],[20,]),'STRING':([17,25,28,29,30,31,32,43,],[22,35,22,22,-21,-22,-23,35,]),'NUMBER':([17,25,28,29,30,31,32,43,],[24,37,24,24,-21,-22,-23,37,]),'PLUS':([21,22,23,24,40,41,],[29,-11,-12,-13,29,29,]),'EQUAL':([21,22,23,24,41,],[30,-11,-12,-13,-14,]),'GREATER':([21,22,23,24,41,],[31,-11,-12,-13,-14,]),'LESS':([21,22,23,24,41,],[32,-11,-12,-13,-14,]),'RPAREN':([22,23,24,27,33,34,35,36,37,40,41,46,],[-11,-12,-13,39,42,-24,-26,-27,-28,44,-14,-25,]),'COMMA':([34,35,36,37,],[43,-26,-27,-28,]),'SEMICOLON':([42,],[45,]),}
+_lr_action_items = {'error':([0,2,3,4,5,6,7,8,13,19,26,38,39,44,46,48,49,50,],[7,7,-2,-4,-5,-6,-7,-8,-3,7,7,-30,-11,-10,-9,7,7,-21,]),'CONSOLE':([0,2,3,4,5,6,7,8,13,19,26,38,39,44,46,48,49,50,],[9,9,-2,-4,-5,-6,-7,-8,-3,9,9,-30,-11,-10,-9,9,9,-21,]),'CLASS':([0,2,3,4,5,6,7,8,13,19,26,38,39,44,46,48,49,50,],[10,10,-2,-4,-5,-6,-7,-8,-3,10,10,-30,-11,-10,-9,10,10,-21,]),'VARIABLE':([0,2,3,4,5,6,7,8,10,13,17,19,25,26,28,29,30,31,32,38,39,43,44,46,48,49,50,],[11,11,-2,-4,-5,-6,-7,-8,15,-3,23,11,36,11,23,23,-22,-23,-24,-30,-11,36,-10,-9,11,11,-21,]),'IF':([0,2,3,4,5,6,7,8,13,19,26,38,39,44,46,48,49,50,],[12,12,-2,-4,-5,-6,-7,-8,-3,12,12,-30,-11,-10,-9,12,12,-21,]),'$end':([1,2,3,4,5,6,7,8,13,38,39,44,46,50,],[0,-1,-2,-4,-5,-6,-7,-8,-3,-30,-11,-10,-9,-21,]),'RBRACE':([3,4,5,6,7,8,13,26,38,39,44,46,49,50,],[-2,-4,-5,-6,-7,-8,-3,38,-30,-11,-10,-9,50,-21,]),'DOT':([9,],[14,]),'ASSIGN':([11,],[16,]),'LPAREN':([12,18,20,],[17,25,27,]),'LOG':([14,],[18,]),'LBRACE':([15,45,],[19,48,]),'INPUT':([16,],[20,]),'STRING':([17,25,28,29,30,31,32,43,],[22,35,22,22,-22,-23,-24,35,]),'NUMBER':([17,25,28,29,30,31,32,43,],[24,37,24,24,-22,-23,-24,37,]),'PLUS':([21,22,23,24,40,41,],[29,-12,-13,-14,29,29,]),'EQUAL':([21,22,23,24,41,],[30,-12,-13,-14,-15,]),'GREATER':([21,22,23,24,41,],[31,-12,-13,-14,-15,]),'LESS':([21,22,23,24,41,],[32,-12,-13,-14,-15,]),'RPAREN':([22,23,24,27,33,34,35,36,37,40,41,47,],[-12,-13,-14,39,42,-25,-27,-28,-29,45,-15,-26,]),'COMMA':([34,35,36,37,],[43,-27,-28,-29,]),'SEMICOLON':([39,42,],[44,46,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statements':([0,19,47,],[2,26,48,]),'statement':([0,2,19,26,47,48,],[3,13,3,13,3,13,]),'print':([0,2,19,26,47,48,],[4,4,4,4,4,4,]),'structure_declaration':([0,2,19,26,47,48,],[5,5,5,5,5,5,]),'input':([0,2,19,26,47,48,],[6,6,6,6,6,6,]),'condition':([0,2,19,26,47,48,],[8,8,8,8,8,8,]),'expression':([17,28,29,],[21,40,41,]),'condition_operator':([21,],[28,]),'arguments':([25,43,],[33,46,]),'argument':([25,43,],[34,34,]),}
+_lr_goto_items = {'program':([0,],[1,]),'statements':([0,19,48,],[2,26,49,]),'statement':([0,2,19,26,48,49,],[3,13,3,13,3,13,]),'print':([0,2,19,26,48,49,],[4,4,4,4,4,4,]),'structure_declaration':([0,2,19,26,48,49,],[5,5,5,5,5,5,]),'input':([0,2,19,26,48,49,],[6,6,6,6,6,6,]),'condition':([0,2,19,26,48,49,],[8,8,8,8,8,8,]),'expression':([17,28,29,],[21,40,41,]),'condition_operator':([21,],[28,]),'arguments':([25,43,],[33,47,]),'argument':([25,43,],[34,34,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -28,14 +28,15 @@ del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
   ('program -> statements','program',1,'p_program','syntax_analyzer.py',10),
-  ('statements -> statement','statements',1,'p_statements','syntax_analyzer.py',14),
-  ('statements -> statements statement','statements',2,'p_statements','syntax_analyzer.py',15),
-  ('statement -> print','statement',1,'p_statement','syntax_analyzer.py',19),
-  ('statement -> structure_declaration','statement',1,'p_statement','syntax_analyzer.py',20),
-  ('statement -> input','statement',1,'p_statement','syntax_analyzer.py',21),
-  ('statement -> error','statement',1,'p_statement','syntax_analyzer.py',22),
-  ('statement -> condition','statement',1,'p_statement','syntax_analyzer.py',23),
-  ('print -> CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON','print',7,'p_print','syntax_analyzer.py',30),
+  ('statements -> statement','statements',1,'p_statements','syntax_analyzer.py',13),
+  ('statements -> statements statement','statements',2,'p_statements','syntax_analyzer.py',14),
+  ('statement -> print','statement',1,'p_statement','syntax_analyzer.py',18),
+  ('statement -> structure_declaration','statement',1,'p_statement','syntax_analyzer.py',19),
+  ('statement -> input','statement',1,'p_statement','syntax_analyzer.py',20),
+  ('statement -> error','statement',1,'p_statement','syntax_analyzer.py',21),
+  ('statement -> condition','statement',1,'p_statement','syntax_analyzer.py',22),
+  ('print -> CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON','print',7,'p_print','syntax_analyzer.py',29),
+  ('input -> VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON','input',6,'p_input','syntax_analyzer.py',34),
   ('input -> VARIABLE ASSIGN INPUT LPAREN RPAREN','input',5,'p_input','syntax_analyzer.py',35),
   ('expression -> STRING','expression',1,'p_expression','syntax_analyzer.py',40),
   ('expression -> VARIABLE','expression',1,'p_expression','syntax_analyzer.py',41),

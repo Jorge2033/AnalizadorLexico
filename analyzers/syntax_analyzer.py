@@ -31,7 +31,8 @@ def p_print(p):
 
 # Solicitud de datos por teclado 
 def p_input(p):
-  '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN'''
+  '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
+            | VARIABLE ASSIGN INPUT LPAREN RPAREN '''
   pass
 
 #expresiones aritméticas con uno o más operadores

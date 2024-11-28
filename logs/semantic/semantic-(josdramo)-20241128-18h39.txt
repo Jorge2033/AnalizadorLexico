@@ -1,0 +1,4 @@
+Error de sintaxis en linea 1, posicion 0: Token inesperado 'var' 
+'LexToken(VAR,'var',1,0)'
+Error de sintaxis en linea 1, posicion 17: Token inesperado ';' 
+'LexToken(SEMICOLON,';',1,17)'
