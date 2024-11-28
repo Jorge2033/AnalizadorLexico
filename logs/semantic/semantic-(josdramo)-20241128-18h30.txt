@@ -1,0 +1,2 @@
+Error de sintaxis en linea 1, posicion 20: Token inesperado 'variable' 
+'LexToken(VARIABLE,'variable',1,20)'

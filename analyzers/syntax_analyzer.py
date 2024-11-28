@@ -8,7 +8,6 @@ import re
 # ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
 def p_program(p):
     '''program : statements'''
-    print("Programa válido.")
 
 def p_statements(p):
     '''statements : statement
@@ -101,29 +100,13 @@ def p_structure_declaration(p):
 
 
 def p_error(p):
-  if p:
-    print(f"Error de sintaxis en '{p.value}' línea {p.lineno}\n")   
-  else:
-    print("Error de sintaxis: fin inesperado del archivo\n")
+    if p:
+        error_msg = f"Error de sintaxis en linea {p.lineno}, posicion {p.lexpos}: Token inesperado '{p.value}' \n'{p}'"
+    else:
+        error_msg = "Syntax error: Unexpected end of input"
+    print(error_msg)
+
 
 parser = yacc.yacc()
 
-def capture_semantic_errors(input_code):
-    log_directory = "logs/semantic/"
-    if not os.path.exists(log_directory):
-        os.makedirs(log_directory)
 
-    log_filename = f"semantic-(modificarNombre)-{datetime.datetime.now().strftime('%Y%m%d-%Hh%M')}.txt"
-    log_filepath = os.path.join(log_directory, log_filename)
-
-    with open(log_filepath, "w") as f:
-        sys.stdout = f
-        lines = input_code.strip().split('\n')
-        for line_num, line in enumerate(lines, start=1):
-            try:
-                parser.parse(line)
-            except Exception as e:
-                print(f"Error en línea {line_num}: {e}")
-        sys.stdout = sys.__stdout__
-    
-    print("Análisis completado. Los errores semánticos se han guardado en el archivo de registro:", log_filename)

@@ -4,7 +4,8 @@ import analyzers.lexical_analyzer as lexical
 import analyzers.syntax_analyzer as syntax
 import sys
 import ply.yacc as yacc
-
+import os
+import datetime
 
 class TextComponent:
     def __init__(self, text_widget):
@@ -16,10 +17,34 @@ class TextComponent:
         self.text_widget.see(tk.END)
         self.text_widget.config(state=tk.DISABLED)  # Deshabilitar escritura
 
+log_username = "default_user"
+
+def edit_username():
+    """Ventana emergente para editar el nombre de usuario."""
+    def save_username():
+        global log_username
+        log_username = username_entry.get()
+        username_window.destroy()
+
+    username_window = tk.Toplevel(root)
+    username_window.title("Editar Nombre de Usuario")
+    username_window.geometry("300x150")
+    username_window.configure(bg="#2C3E50")
+
+    label = tk.Label(username_window, text="Ingrese su nombre de usuario:", bg="#2C3E50", fg="white", font=("Arial", 12))
+    label.pack(pady=10)
+
+    username_entry = tk.Entry(username_window, font=("Arial", 12))
+    username_entry.pack(pady=5)
+
+    save_button = tk.Button(username_window, text="Guardar", command=save_username, bg="green", fg="white", font=("Arial", 10))
+    save_button.pack(pady=10)
+
 def run_TypeScript(text_input):
-    console_text.config(state=tk.NORMAL)  # Habilitar escritura en la consola
-    console_text.delete(1.0, tk.END) 
+    console_text.config(state=tk.NORMAL)
+    console_text.delete(1.0, tk.END)
     sys.stdout = TextComponent(console_text)
+
     lexical.lexer.input(text_input)
     try:
         for token in lexical.lexer:
@@ -30,8 +55,25 @@ def run_TypeScript(text_input):
     except Exception as e:
         print(f"Error: {e}")
 
-    sys.stdout = sys.__stdout__  # Restaurar sys.stdout original
-    console_text.config(state=tk.DISABLED)  # Deshabilitar escritura en la consola
+    log_directory = "logs/semantic/"
+    if not os.path.exists(log_directory):
+        os.makedirs(log_directory)
+
+    log_filename = f"semantic-({log_username})-{datetime.datetime.now().strftime('%Y%m%d-%Hh%M')}.txt"
+    log_filepath = os.path.join(log_directory, log_filename)
+
+    with open(log_filepath, "w") as f:
+        sys.stdout = f
+        lines = text_input.strip().split('\n')
+        for line_num, line in enumerate(lines, start=1):
+            try:
+                syntax.parser.parse(line)
+            except Exception as e:
+                print(f"Error en línea {line_num}: {e}")
+        sys.stdout = sys.__stdout__
+
+    print("Análisis completado. Los errores semánticos se han guardado en el archivo de registro:", log_filename)
+
 
 # Función para el botón "Run"
 def on_run():
@@ -58,6 +100,10 @@ main_frame.grid(row=0, column=0, columnspan=2, sticky="nsew")
 header = tk.Frame(main_frame, bg="#3498DB")
 header.grid(row=0, column=0, columnspan=2, sticky="ew")
 header.grid_columnconfigure(0, weight=1)
+
+# Agregar botón para editar el nombre de usuario
+edit_user_button = tk.Button(header, text="Editar Usuario", bg="orange", fg="white", font=("Arial", 12), relief="flat", command=edit_username)
+edit_user_button.grid(row=0, column=3, padx=10, pady=5, sticky="e")
 
 # Añadir el logo y el título al encabezado
 logo_image = Image.open("typescript_logo.png")
@@ -102,3 +148,5 @@ footer.grid(row=2, column=0, columnspan=2, sticky="ew")
 
 # Ejecutar la ventana
 root.mainloop()
+
+

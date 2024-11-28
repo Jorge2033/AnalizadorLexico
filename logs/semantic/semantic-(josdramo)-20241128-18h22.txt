@@ -1,0 +1,9 @@
+Syntax error: Unexpected end of input
+Error de sintaxis en linea 1, posicion 4: Token inesperado 'let' 
+'LexToken(LET,'let',1,4)'
+Programa válido.
+Error de sintaxis en linea 1, posicion 4: Token inesperado 'let' 
+'LexToken(LET,'let',1,4)'
+Programa válido.
+Error de sintaxis en linea 1, posicion 0: Token inesperado '}' 
+'LexToken(RBRACE,'}',1,0)'

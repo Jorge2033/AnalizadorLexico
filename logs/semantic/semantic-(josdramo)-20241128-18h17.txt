@@ -1,0 +1,3 @@
+Error de sintaxis en '42' línea 1
+
+Programa válido.
