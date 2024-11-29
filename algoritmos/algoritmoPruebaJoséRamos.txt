@@ -1,0 +1,48 @@
+Algoritmo sin errores:
+
+class Vehiculo {
+    let marca: string;
+    let modelo: string;
+}
+
+constructor(marca: string, modelo: string) {
+        this.marca = marca;
+        this.modelo = modelo;
+}
+
+let resultado = 10 + 20 * 3;
+if (resultado > 50) {
+    console.log("El resultado es mayor a 50");
+} else {
+    console.log("El resultado es menor o igual a 50");
+}
+
+const entrada = prompt();
+
+
+
+Algoritmo con errores:
+
+class Vehiculo {
+    var marca string     
+    let modelo: string;
+
+constructor(marca, modelo: string) { 
+        this.marca == marca;  
+        this.modelo = modelo;
+    }
+
+    
+}
+
+let auto = new Vehiculo("Toyota", "Corolla");
+auto.mostrarInfo();
+
+let resultado = 10 + - * 20;  
+if resultado > 50 {  
+    console.log "El resultado es mayor a 50"; 
+} else {
+    console.log("El resultado es menor o igual a 50")
+}
+
+entrada = input(); 

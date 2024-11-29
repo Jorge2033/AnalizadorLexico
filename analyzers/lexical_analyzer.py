@@ -41,6 +41,7 @@ reserved = {
     'prompt': 'PROMPT', 
     'console': 'CONSOLE',
     'log': 'LOG',
+    'constructor': 'CONSTRUCTOR',
 }
 # ------Fin: Jorge Gaibor (Palabras Reservadas) ------
 

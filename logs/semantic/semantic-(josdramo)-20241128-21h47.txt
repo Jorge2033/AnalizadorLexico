@@ -1,0 +1,46 @@
+Error de sintaxis: fin inesperado de entrada
+Error en línea 1: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 13: Token inesperado ':'
+Error en línea 2: Error de sintaxis en línea 5, posición 13: Token inesperado ':'
+Error de sintaxis en línea 5, posición 14: Token inesperado ':'
+Error en línea 3: Error de sintaxis en línea 5, posición 14: Token inesperado ':'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 4: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 15: Token inesperado '('
+Error en línea 5: Error de sintaxis en línea 5, posición 15: Token inesperado '('
+Error de sintaxis en línea 5, posición 8: Token inesperado 'this'
+Error en línea 6: Error de sintaxis en línea 5, posición 8: Token inesperado 'this'
+Error de sintaxis en línea 5, posición 8: Token inesperado 'this'
+Error en línea 7: Error de sintaxis en línea 5, posición 8: Token inesperado 'this'
+Error de sintaxis en línea 5, posición 4: Token inesperado '}'
+Error en línea 8: Error de sintaxis en línea 5, posición 4: Token inesperado '}'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 9: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 15: Token inesperado '('
+Error en línea 10: Error de sintaxis en línea 5, posición 15: Token inesperado '('
+Error de sintaxis en línea 5, posición 30: Token inesperado '+'
+Error en línea 11: Error de sintaxis en línea 5, posición 30: Token inesperado '+'
+Error de sintaxis en línea 5, posición 4: Token inesperado '}'
+Error en línea 12: Error de sintaxis en línea 5, posición 4: Token inesperado '}'
+Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error en línea 13: Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 14: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 11: Token inesperado 'new'
+Error en línea 15: Error de sintaxis en línea 5, posición 11: Token inesperado 'new'
+Error de sintaxis en línea 5, posición 4: Token inesperado '.'
+Error en línea 16: Error de sintaxis en línea 5, posición 4: Token inesperado '.'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 17: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 16: Token inesperado '10'
+Error en línea 18: Error de sintaxis en línea 5, posición 16: Token inesperado '10'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 19: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error en línea 21: Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error en línea 23: Error de sintaxis en línea 5, posición 0: Token inesperado '}'
+Error de sintaxis: fin inesperado de entrada
+Error en línea 24: Error de sintaxis: fin inesperado de entrada
+Error de sintaxis en línea 5, posición 0: Token inesperado 'const'
+Error en línea 25: Error de sintaxis en línea 5, posición 0: Token inesperado 'const'
