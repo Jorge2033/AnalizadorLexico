@@ -56,6 +56,12 @@ def p_factor(p):
   '''factor : NUMBER
             | VARIABLE'''
   pass
+
+def p_invalid_declaration(p):
+    '''typed_variable_declaration : VARIABLE error
+                                   | VARIABLE VARIABLE error'''
+    print(f"Error: Token inesperado '{p[2].value}' en línea {p.lineno(2)}, posición {p.lexpos(2)}.")
+
 # ------Fin: Reglas Sintácticas por José Ramos ------
 
 
@@ -70,15 +76,24 @@ def p_condition_operator(p):
                         | LESS'''
     pass
 
-    def p_variable_declaration(p):
-        '''variable_declaration : LET VARIABLE ASSIGN expression SEMICOLON
-                            | CONST VARIABLE ASSIGN expression SEMICOLON
-                            | VAR VARIABLE ASSIGN expression SEMICOLON'''
-        pass
+def p_typed_variable_declaration(p):
+    '''typed_variable_declaration : VAR VARIABLE COLON VARIABLE SEMICOLON
+                                   | LET VARIABLE COLON VARIABLE SEMICOLON
+                                   | CONST VARIABLE COLON VARIABLE SEMICOLON
+                                   | VAR VARIABLE error
+                                   | LET VARIABLE error
+                                   | CONST VARIABLE error'''
+    if len(p) == 6:  # Declaración válida
+        p[0] = f"Variable declarada: {p[2]} de tipo {p[4]}"
+    else:  # Declaración inválida
+        print(f"Error de sintaxis en línea {p.lineno(2)}, posición {p.lexpos(2)}: Falta ':' o tipo en declaración de '{p[2]}'.")
+
+
 # ------Fin: Reglas Sintácticas por Julio Vivas ------
 
 
 # ------Inicio: Reglas Sintácticas por Jorge Gaibor ------
+
 def p_arguments(p):
     '''arguments : argument
                  | argument COMMA arguments'''
@@ -95,17 +110,23 @@ def p_argument(p):
     p[0] = p[1]
 
 def p_structure_declaration(p):
-    '''structure_declaration : CLASS VARIABLE LBRACE statements RBRACE'''
+    '''structure_declaration : CLASS VARIABLE LBRACE typed_variable_declarations RBRACE'''
+    p[0] = f"Clase '{p[2]}' con declaraciones de variables."
+
+def p_typed_variable_declarations(p):
+    '''typed_variable_declarations : typed_variable_declaration
+                                   | typed_variable_declarations typed_variable_declaration'''
     pass
 # ------Fin: Reglas Sintácticas por Jorge Gaibor ------
 
 
 def p_error(p):
     if p:
-        error_msg = f"Error de sintaxis en linea {p.lineno}, posicion {p.lexpos}: Token inesperado '{p.value}' \n'{p}'"
+        error_msg = f"Error de sintaxis en línea {p.lineno}, posición {p.lexpos}: Token inesperado '{p.value}'"
     else:
-        error_msg = "Syntax error: Unexpected end of input"
+        error_msg = "Error de sintaxis: fin inesperado de entrada"
     print(error_msg)
+    raise SyntaxError(error_msg)  # Detener el análisis si hay un error
 
 
 parser = yacc.yacc()

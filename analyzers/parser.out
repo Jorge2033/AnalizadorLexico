@@ -7,8 +7,6 @@ Unused terminals:
     BREAK
     CASE
     CATCH
-    COLON
-    CONST
     CONTINUE
     DEFAULT
     DELETE
@@ -28,7 +26,6 @@ Unused terminals:
     INSTANCEOF
     LBRACKET
     LESS_EQUAL
-    LET
     MINUS
     MINUS_ASSIGN
     MODULO
@@ -50,7 +47,6 @@ Unused terminals:
     THROW
     TRY
     TYPEOF
-    VAR
     VOID
     WHILE
 
@@ -77,16 +73,26 @@ Rule 17    term -> term DIVIDE factor
 Rule 18    term -> factor
 Rule 19    factor -> NUMBER
 Rule 20    factor -> VARIABLE
-Rule 21    condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
-Rule 22    condition_operator -> EQUAL
-Rule 23    condition_operator -> GREATER
-Rule 24    condition_operator -> LESS
-Rule 25    arguments -> argument
-Rule 26    arguments -> argument COMMA arguments
-Rule 27    argument -> STRING
-Rule 28    argument -> VARIABLE
-Rule 29    argument -> NUMBER
-Rule 30    structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE
+Rule 21    typed_variable_declaration -> VARIABLE error
+Rule 22    typed_variable_declaration -> VARIABLE VARIABLE error
+Rule 23    condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+Rule 24    condition_operator -> EQUAL
+Rule 25    condition_operator -> GREATER
+Rule 26    condition_operator -> LESS
+Rule 27    typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON
+Rule 28    typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON
+Rule 29    typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON
+Rule 30    typed_variable_declaration -> VAR VARIABLE error
+Rule 31    typed_variable_declaration -> LET VARIABLE error
+Rule 32    typed_variable_declaration -> CONST VARIABLE error
+Rule 33    arguments -> argument
+Rule 34    arguments -> argument COMMA arguments
+Rule 35    argument -> STRING
+Rule 36    argument -> VARIABLE
+Rule 37    argument -> NUMBER
+Rule 38    structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE
+Rule 39    typed_variable_declarations -> typed_variable_declaration
+Rule 40    typed_variable_declarations -> typed_variable_declarations typed_variable_declaration
 
 Terminals, with rules where they appear
 
@@ -96,11 +102,11 @@ ASSIGN               : 10 11
 BREAK                : 
 CASE                 : 
 CATCH                : 
-CLASS                : 30
-COLON                : 
-COMMA                : 26
+CLASS                : 38
+COLON                : 27 28 29
+COMMA                : 34
 CONSOLE              : 9
-CONST                : 
+CONST                : 29 32
 CONTINUE             : 
 DEFAULT              : 
 DELETE               : 
@@ -109,28 +115,28 @@ DIVIDE_ASSIGN        :
 DO                   : 
 DOT                  : 9
 ELSE                 : 
-EQUAL                : 22
+EQUAL                : 24
 EXPORT               : 
 EXTENDS              : 
 FINALLY              : 
 FOR                  : 
 FROM                 : 
 FUNCTION             : 
-GREATER              : 23
+GREATER              : 25
 GREATER_EQUAL        : 
-IF                   : 21
+IF                   : 23
 IMPLEMENTS           : 
 IMPORT               : 
 IN                   : 
 INPUT                : 10 11
 INSTANCEOF           : 
-LBRACE               : 21 30
+LBRACE               : 23 38
 LBRACKET             : 
-LESS                 : 24
+LESS                 : 26
 LESS_EQUAL           : 
-LET                  : 
+LET                  : 28 31
 LOG                  : 9
-LPAREN               : 9 10 11 21
+LPAREN               : 9 10 11 23
 MINUS                : 
 MINUS_ASSIGN         : 
 MODULO               : 
@@ -140,46 +146,48 @@ MULTIPLY_ASSIGN      :
 NEW                  : 
 NOT                  : 
 NOT_EQUAL            : 
-NUMBER               : 14 19 29
+NUMBER               : 14 19 37
 OR                   : 
 PLUS                 : 15
 PLUS_ASSIGN          : 
 PRINT                : 
 QUESTION_MARK        : 
-RBRACE               : 21 30
+RBRACE               : 23 38
 RBRACKET             : 
 RETURN               : 
-RPAREN               : 9 10 11 21
-SEMICOLON            : 9 10
+RPAREN               : 9 10 11 23
+SEMICOLON            : 9 10 27 28 29
 STRICT_EQUAL         : 
-STRING               : 12 27
+STRING               : 12 35
 SUPER                : 
 SWITCH               : 
 THIS                 : 
 THROW                : 
 TRY                  : 
 TYPEOF               : 
-VAR                  : 
-VARIABLE             : 10 11 13 20 28 30
+VAR                  : 27 30
+VARIABLE             : 10 11 13 20 21 22 22 27 27 28 28 29 29 30 31 32 36 38
 VOID                 : 
 WHILE                : 
-error                : 7
+error                : 7 21 22 30 31 32
 
 Nonterminals, with rules where they appear
 
-argument             : 25 26
-arguments            : 9 26
+argument             : 33 34
+arguments            : 9 34
 condition            : 8
-condition_operator   : 21
-expression           : 15 15 21 21
+condition_operator   : 23
+expression           : 15 15 23 23
 factor               : 16 17 18
 input                : 6
 print                : 4
 program              : 0
 statement            : 2 3
-statements           : 1 3 21 30
+statements           : 1 3 23
 structure_declaration : 5
 term                 : 16 17
+typed_variable_declaration : 39 40
+typed_variable_declarations : 38 40
 
 Parsing method: LALR
 
@@ -195,10 +203,10 @@ state 0
     (7) statement -> . error
     (8) statement -> . condition
     (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+    (38) structure_declaration -> . CLASS VARIABLE LBRACE typed_variable_declarations RBRACE
     (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
     (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
 
     error           shift and go to state 7
     CONSOLE         shift and go to state 9
@@ -230,10 +238,10 @@ state 2
     (7) statement -> . error
     (8) statement -> . condition
     (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+    (38) structure_declaration -> . CLASS VARIABLE LBRACE typed_variable_declarations RBRACE
     (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
     (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
 
     $end            reduce using rule 1 (program -> statements .)
     error           shift and go to state 7
@@ -335,7 +343,7 @@ state 9
 
 state 10
 
-    (30) structure_declaration -> CLASS . VARIABLE LBRACE statements RBRACE
+    (38) structure_declaration -> CLASS . VARIABLE LBRACE typed_variable_declarations RBRACE
 
     VARIABLE        shift and go to state 15
 
@@ -350,7 +358,7 @@ state 11
 
 state 12
 
-    (21) condition -> IF . LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> IF . LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
 
     LPAREN          shift and go to state 17
 
@@ -377,7 +385,7 @@ state 14
 
 state 15
 
-    (30) structure_declaration -> CLASS VARIABLE . LBRACE statements RBRACE
+    (38) structure_declaration -> CLASS VARIABLE . LBRACE typed_variable_declarations RBRACE
 
     LBRACE          shift and go to state 19
 
@@ -392,7 +400,7 @@ state 16
 
 state 17
 
-    (21) condition -> IF LPAREN . expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> IF LPAREN . expression condition_operator expression RPAREN LBRACE statements RBRACE
     (12) expression -> . STRING
     (13) expression -> . VARIABLE
     (14) expression -> . NUMBER
@@ -413,55 +421,48 @@ state 18
 
 state 19
 
-    (30) structure_declaration -> CLASS VARIABLE LBRACE . statements RBRACE
-    (2) statements -> . statement
-    (3) statements -> . statements statement
-    (4) statement -> . print
-    (5) statement -> . structure_declaration
-    (6) statement -> . input
-    (7) statement -> . error
-    (8) statement -> . condition
-    (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
-    (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
-    (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (38) structure_declaration -> CLASS VARIABLE LBRACE . typed_variable_declarations RBRACE
+    (39) typed_variable_declarations -> . typed_variable_declaration
+    (40) typed_variable_declarations -> . typed_variable_declarations typed_variable_declaration
+    (21) typed_variable_declaration -> . VARIABLE error
+    (22) typed_variable_declaration -> . VARIABLE VARIABLE error
+    (27) typed_variable_declaration -> . VAR VARIABLE COLON VARIABLE SEMICOLON
+    (28) typed_variable_declaration -> . LET VARIABLE COLON VARIABLE SEMICOLON
+    (29) typed_variable_declaration -> . CONST VARIABLE COLON VARIABLE SEMICOLON
+    (30) typed_variable_declaration -> . VAR VARIABLE error
+    (31) typed_variable_declaration -> . LET VARIABLE error
+    (32) typed_variable_declaration -> . CONST VARIABLE error
 
-    error           shift and go to state 7
-    CONSOLE         shift and go to state 9
-    CLASS           shift and go to state 10
-    VARIABLE        shift and go to state 11
-    IF              shift and go to state 12
+    VARIABLE        shift and go to state 26
+    VAR             shift and go to state 29
+    LET             shift and go to state 30
+    CONST           shift and go to state 31
 
-    statements                     shift and go to state 26
-    statement                      shift and go to state 3
-    print                          shift and go to state 4
-    structure_declaration          shift and go to state 5
-    input                          shift and go to state 6
-    condition                      shift and go to state 8
+    typed_variable_declarations    shift and go to state 27
+    typed_variable_declaration     shift and go to state 28
 
 state 20
 
     (10) input -> VARIABLE ASSIGN INPUT . LPAREN RPAREN SEMICOLON
     (11) input -> VARIABLE ASSIGN INPUT . LPAREN RPAREN
 
-    LPAREN          shift and go to state 27
+    LPAREN          shift and go to state 32
 
 
 state 21
 
-    (21) condition -> IF LPAREN expression . condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> IF LPAREN expression . condition_operator expression RPAREN LBRACE statements RBRACE
     (15) expression -> expression . PLUS expression
-    (22) condition_operator -> . EQUAL
-    (23) condition_operator -> . GREATER
-    (24) condition_operator -> . LESS
+    (24) condition_operator -> . EQUAL
+    (25) condition_operator -> . GREATER
+    (26) condition_operator -> . LESS
 
-    PLUS            shift and go to state 29
-    EQUAL           shift and go to state 30
-    GREATER         shift and go to state 31
-    LESS            shift and go to state 32
+    PLUS            shift and go to state 34
+    EQUAL           shift and go to state 35
+    GREATER         shift and go to state 36
+    LESS            shift and go to state 37
 
-    condition_operator             shift and go to state 28
+    condition_operator             shift and go to state 33
 
 state 22
 
@@ -499,58 +500,95 @@ state 24
 state 25
 
     (9) print -> CONSOLE DOT LOG LPAREN . arguments RPAREN SEMICOLON
-    (25) arguments -> . argument
-    (26) arguments -> . argument COMMA arguments
-    (27) argument -> . STRING
-    (28) argument -> . VARIABLE
-    (29) argument -> . NUMBER
+    (33) arguments -> . argument
+    (34) arguments -> . argument COMMA arguments
+    (35) argument -> . STRING
+    (36) argument -> . VARIABLE
+    (37) argument -> . NUMBER
 
-    STRING          shift and go to state 35
-    VARIABLE        shift and go to state 36
-    NUMBER          shift and go to state 37
+    STRING          shift and go to state 40
+    VARIABLE        shift and go to state 41
+    NUMBER          shift and go to state 42
 
-    arguments                      shift and go to state 33
-    argument                       shift and go to state 34
+    arguments                      shift and go to state 38
+    argument                       shift and go to state 39
 
 state 26
 
-    (30) structure_declaration -> CLASS VARIABLE LBRACE statements . RBRACE
-    (3) statements -> statements . statement
-    (4) statement -> . print
-    (5) statement -> . structure_declaration
-    (6) statement -> . input
-    (7) statement -> . error
-    (8) statement -> . condition
-    (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
-    (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
-    (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (21) typed_variable_declaration -> VARIABLE . error
+    (22) typed_variable_declaration -> VARIABLE . VARIABLE error
 
-    RBRACE          shift and go to state 38
-    error           shift and go to state 7
-    CONSOLE         shift and go to state 9
-    CLASS           shift and go to state 10
-    VARIABLE        shift and go to state 11
-    IF              shift and go to state 12
+    error           shift and go to state 44
+    VARIABLE        shift and go to state 43
 
-    statement                      shift and go to state 13
-    print                          shift and go to state 4
-    structure_declaration          shift and go to state 5
-    input                          shift and go to state 6
-    condition                      shift and go to state 8
 
 state 27
+
+    (38) structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations . RBRACE
+    (40) typed_variable_declarations -> typed_variable_declarations . typed_variable_declaration
+    (21) typed_variable_declaration -> . VARIABLE error
+    (22) typed_variable_declaration -> . VARIABLE VARIABLE error
+    (27) typed_variable_declaration -> . VAR VARIABLE COLON VARIABLE SEMICOLON
+    (28) typed_variable_declaration -> . LET VARIABLE COLON VARIABLE SEMICOLON
+    (29) typed_variable_declaration -> . CONST VARIABLE COLON VARIABLE SEMICOLON
+    (30) typed_variable_declaration -> . VAR VARIABLE error
+    (31) typed_variable_declaration -> . LET VARIABLE error
+    (32) typed_variable_declaration -> . CONST VARIABLE error
+
+    RBRACE          shift and go to state 45
+    VARIABLE        shift and go to state 26
+    VAR             shift and go to state 29
+    LET             shift and go to state 30
+    CONST           shift and go to state 31
+
+    typed_variable_declaration     shift and go to state 46
+
+state 28
+
+    (39) typed_variable_declarations -> typed_variable_declaration .
+
+    RBRACE          reduce using rule 39 (typed_variable_declarations -> typed_variable_declaration .)
+    VARIABLE        reduce using rule 39 (typed_variable_declarations -> typed_variable_declaration .)
+    VAR             reduce using rule 39 (typed_variable_declarations -> typed_variable_declaration .)
+    LET             reduce using rule 39 (typed_variable_declarations -> typed_variable_declaration .)
+    CONST           reduce using rule 39 (typed_variable_declarations -> typed_variable_declaration .)
+
+
+state 29
+
+    (27) typed_variable_declaration -> VAR . VARIABLE COLON VARIABLE SEMICOLON
+    (30) typed_variable_declaration -> VAR . VARIABLE error
+
+    VARIABLE        shift and go to state 47
+
+
+state 30
+
+    (28) typed_variable_declaration -> LET . VARIABLE COLON VARIABLE SEMICOLON
+    (31) typed_variable_declaration -> LET . VARIABLE error
+
+    VARIABLE        shift and go to state 48
+
+
+state 31
+
+    (29) typed_variable_declaration -> CONST . VARIABLE COLON VARIABLE SEMICOLON
+    (32) typed_variable_declaration -> CONST . VARIABLE error
+
+    VARIABLE        shift and go to state 49
+
+
+state 32
 
     (10) input -> VARIABLE ASSIGN INPUT LPAREN . RPAREN SEMICOLON
     (11) input -> VARIABLE ASSIGN INPUT LPAREN . RPAREN
 
-    RPAREN          shift and go to state 39
+    RPAREN          shift and go to state 50
 
 
-state 28
+state 33
 
-    (21) condition -> IF LPAREN expression condition_operator . expression RPAREN LBRACE statements RBRACE
+    (23) condition -> IF LPAREN expression condition_operator . expression RPAREN LBRACE statements RBRACE
     (12) expression -> . STRING
     (13) expression -> . VARIABLE
     (14) expression -> . NUMBER
@@ -560,9 +598,9 @@ state 28
     VARIABLE        shift and go to state 23
     NUMBER          shift and go to state 24
 
-    expression                     shift and go to state 40
+    expression                     shift and go to state 51
 
-state 29
+state 34
 
     (15) expression -> expression PLUS . expression
     (12) expression -> . STRING
@@ -574,94 +612,150 @@ state 29
     VARIABLE        shift and go to state 23
     NUMBER          shift and go to state 24
 
-    expression                     shift and go to state 41
-
-state 30
-
-    (22) condition_operator -> EQUAL .
-
-    STRING          reduce using rule 22 (condition_operator -> EQUAL .)
-    VARIABLE        reduce using rule 22 (condition_operator -> EQUAL .)
-    NUMBER          reduce using rule 22 (condition_operator -> EQUAL .)
-
-
-state 31
-
-    (23) condition_operator -> GREATER .
-
-    STRING          reduce using rule 23 (condition_operator -> GREATER .)
-    VARIABLE        reduce using rule 23 (condition_operator -> GREATER .)
-    NUMBER          reduce using rule 23 (condition_operator -> GREATER .)
-
-
-state 32
-
-    (24) condition_operator -> LESS .
-
-    STRING          reduce using rule 24 (condition_operator -> LESS .)
-    VARIABLE        reduce using rule 24 (condition_operator -> LESS .)
-    NUMBER          reduce using rule 24 (condition_operator -> LESS .)
-
-
-state 33
-
-    (9) print -> CONSOLE DOT LOG LPAREN arguments . RPAREN SEMICOLON
-
-    RPAREN          shift and go to state 42
-
-
-state 34
-
-    (25) arguments -> argument .
-    (26) arguments -> argument . COMMA arguments
-
-    RPAREN          reduce using rule 25 (arguments -> argument .)
-    COMMA           shift and go to state 43
-
+    expression                     shift and go to state 52
 
 state 35
 
-    (27) argument -> STRING .
+    (24) condition_operator -> EQUAL .
 
-    COMMA           reduce using rule 27 (argument -> STRING .)
-    RPAREN          reduce using rule 27 (argument -> STRING .)
+    STRING          reduce using rule 24 (condition_operator -> EQUAL .)
+    VARIABLE        reduce using rule 24 (condition_operator -> EQUAL .)
+    NUMBER          reduce using rule 24 (condition_operator -> EQUAL .)
 
 
 state 36
 
-    (28) argument -> VARIABLE .
+    (25) condition_operator -> GREATER .
 
-    COMMA           reduce using rule 28 (argument -> VARIABLE .)
-    RPAREN          reduce using rule 28 (argument -> VARIABLE .)
+    STRING          reduce using rule 25 (condition_operator -> GREATER .)
+    VARIABLE        reduce using rule 25 (condition_operator -> GREATER .)
+    NUMBER          reduce using rule 25 (condition_operator -> GREATER .)
 
 
 state 37
 
-    (29) argument -> NUMBER .
+    (26) condition_operator -> LESS .
 
-    COMMA           reduce using rule 29 (argument -> NUMBER .)
-    RPAREN          reduce using rule 29 (argument -> NUMBER .)
+    STRING          reduce using rule 26 (condition_operator -> LESS .)
+    VARIABLE        reduce using rule 26 (condition_operator -> LESS .)
+    NUMBER          reduce using rule 26 (condition_operator -> LESS .)
 
 
 state 38
 
-    (30) structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .
+    (9) print -> CONSOLE DOT LOG LPAREN arguments . RPAREN SEMICOLON
 
-    error           reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    CONSOLE         reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    CLASS           reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    VARIABLE        reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    IF              reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    $end            reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
-    RBRACE          reduce using rule 30 (structure_declaration -> CLASS VARIABLE LBRACE statements RBRACE .)
+    RPAREN          shift and go to state 53
 
 
 state 39
 
+    (33) arguments -> argument .
+    (34) arguments -> argument . COMMA arguments
+
+    RPAREN          reduce using rule 33 (arguments -> argument .)
+    COMMA           shift and go to state 54
+
+
+state 40
+
+    (35) argument -> STRING .
+
+    COMMA           reduce using rule 35 (argument -> STRING .)
+    RPAREN          reduce using rule 35 (argument -> STRING .)
+
+
+state 41
+
+    (36) argument -> VARIABLE .
+
+    COMMA           reduce using rule 36 (argument -> VARIABLE .)
+    RPAREN          reduce using rule 36 (argument -> VARIABLE .)
+
+
+state 42
+
+    (37) argument -> NUMBER .
+
+    COMMA           reduce using rule 37 (argument -> NUMBER .)
+    RPAREN          reduce using rule 37 (argument -> NUMBER .)
+
+
+state 43
+
+    (22) typed_variable_declaration -> VARIABLE VARIABLE . error
+
+    error           shift and go to state 55
+
+
+state 44
+
+    (21) typed_variable_declaration -> VARIABLE error .
+
+    RBRACE          reduce using rule 21 (typed_variable_declaration -> VARIABLE error .)
+    VARIABLE        reduce using rule 21 (typed_variable_declaration -> VARIABLE error .)
+    VAR             reduce using rule 21 (typed_variable_declaration -> VARIABLE error .)
+    LET             reduce using rule 21 (typed_variable_declaration -> VARIABLE error .)
+    CONST           reduce using rule 21 (typed_variable_declaration -> VARIABLE error .)
+
+
+state 45
+
+    (38) structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .
+
+    error           reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    CONSOLE         reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    CLASS           reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    VARIABLE        reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    IF              reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    $end            reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+    RBRACE          reduce using rule 38 (structure_declaration -> CLASS VARIABLE LBRACE typed_variable_declarations RBRACE .)
+
+
+state 46
+
+    (40) typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .
+
+    RBRACE          reduce using rule 40 (typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .)
+    VARIABLE        reduce using rule 40 (typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .)
+    VAR             reduce using rule 40 (typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .)
+    LET             reduce using rule 40 (typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .)
+    CONST           reduce using rule 40 (typed_variable_declarations -> typed_variable_declarations typed_variable_declaration .)
+
+
+state 47
+
+    (27) typed_variable_declaration -> VAR VARIABLE . COLON VARIABLE SEMICOLON
+    (30) typed_variable_declaration -> VAR VARIABLE . error
+
+    COLON           shift and go to state 56
+    error           shift and go to state 57
+
+
+state 48
+
+    (28) typed_variable_declaration -> LET VARIABLE . COLON VARIABLE SEMICOLON
+    (31) typed_variable_declaration -> LET VARIABLE . error
+
+    COLON           shift and go to state 58
+    error           shift and go to state 59
+
+
+state 49
+
+    (29) typed_variable_declaration -> CONST VARIABLE . COLON VARIABLE SEMICOLON
+    (32) typed_variable_declaration -> CONST VARIABLE . error
+
+    COLON           shift and go to state 60
+    error           shift and go to state 61
+
+
+state 50
+
     (10) input -> VARIABLE ASSIGN INPUT LPAREN RPAREN . SEMICOLON
     (11) input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .
 
-    SEMICOLON       shift and go to state 44
+    SEMICOLON       shift and go to state 62
     error           reduce using rule 11 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .)
     CONSOLE         reduce using rule 11 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .)
     CLASS           reduce using rule 11 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .)
@@ -671,16 +765,16 @@ state 39
     RBRACE          reduce using rule 11 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN .)
 
 
-state 40
+state 51
 
-    (21) condition -> IF LPAREN expression condition_operator expression . RPAREN LBRACE statements RBRACE
+    (23) condition -> IF LPAREN expression condition_operator expression . RPAREN LBRACE statements RBRACE
     (15) expression -> expression . PLUS expression
 
-    RPAREN          shift and go to state 45
-    PLUS            shift and go to state 29
+    RPAREN          shift and go to state 63
+    PLUS            shift and go to state 34
 
 
-state 41
+state 52
 
     (15) expression -> expression PLUS expression .
     (15) expression -> expression . PLUS expression
@@ -690,35 +784,100 @@ state 41
     GREATER         reduce using rule 15 (expression -> expression PLUS expression .)
     LESS            reduce using rule 15 (expression -> expression PLUS expression .)
     RPAREN          reduce using rule 15 (expression -> expression PLUS expression .)
-    PLUS            shift and go to state 29
+    PLUS            shift and go to state 34
 
   ! PLUS            [ reduce using rule 15 (expression -> expression PLUS expression .) ]
 
 
-state 42
+state 53
 
     (9) print -> CONSOLE DOT LOG LPAREN arguments RPAREN . SEMICOLON
 
-    SEMICOLON       shift and go to state 46
+    SEMICOLON       shift and go to state 64
 
 
-state 43
+state 54
 
-    (26) arguments -> argument COMMA . arguments
-    (25) arguments -> . argument
-    (26) arguments -> . argument COMMA arguments
-    (27) argument -> . STRING
-    (28) argument -> . VARIABLE
-    (29) argument -> . NUMBER
+    (34) arguments -> argument COMMA . arguments
+    (33) arguments -> . argument
+    (34) arguments -> . argument COMMA arguments
+    (35) argument -> . STRING
+    (36) argument -> . VARIABLE
+    (37) argument -> . NUMBER
 
-    STRING          shift and go to state 35
-    VARIABLE        shift and go to state 36
-    NUMBER          shift and go to state 37
+    STRING          shift and go to state 40
+    VARIABLE        shift and go to state 41
+    NUMBER          shift and go to state 42
 
-    argument                       shift and go to state 34
-    arguments                      shift and go to state 47
+    argument                       shift and go to state 39
+    arguments                      shift and go to state 65
 
-state 44
+state 55
+
+    (22) typed_variable_declaration -> VARIABLE VARIABLE error .
+
+    RBRACE          reduce using rule 22 (typed_variable_declaration -> VARIABLE VARIABLE error .)
+    VARIABLE        reduce using rule 22 (typed_variable_declaration -> VARIABLE VARIABLE error .)
+    VAR             reduce using rule 22 (typed_variable_declaration -> VARIABLE VARIABLE error .)
+    LET             reduce using rule 22 (typed_variable_declaration -> VARIABLE VARIABLE error .)
+    CONST           reduce using rule 22 (typed_variable_declaration -> VARIABLE VARIABLE error .)
+
+
+state 56
+
+    (27) typed_variable_declaration -> VAR VARIABLE COLON . VARIABLE SEMICOLON
+
+    VARIABLE        shift and go to state 66
+
+
+state 57
+
+    (30) typed_variable_declaration -> VAR VARIABLE error .
+
+    RBRACE          reduce using rule 30 (typed_variable_declaration -> VAR VARIABLE error .)
+    VARIABLE        reduce using rule 30 (typed_variable_declaration -> VAR VARIABLE error .)
+    VAR             reduce using rule 30 (typed_variable_declaration -> VAR VARIABLE error .)
+    LET             reduce using rule 30 (typed_variable_declaration -> VAR VARIABLE error .)
+    CONST           reduce using rule 30 (typed_variable_declaration -> VAR VARIABLE error .)
+
+
+state 58
+
+    (28) typed_variable_declaration -> LET VARIABLE COLON . VARIABLE SEMICOLON
+
+    VARIABLE        shift and go to state 67
+
+
+state 59
+
+    (31) typed_variable_declaration -> LET VARIABLE error .
+
+    RBRACE          reduce using rule 31 (typed_variable_declaration -> LET VARIABLE error .)
+    VARIABLE        reduce using rule 31 (typed_variable_declaration -> LET VARIABLE error .)
+    VAR             reduce using rule 31 (typed_variable_declaration -> LET VARIABLE error .)
+    LET             reduce using rule 31 (typed_variable_declaration -> LET VARIABLE error .)
+    CONST           reduce using rule 31 (typed_variable_declaration -> LET VARIABLE error .)
+
+
+state 60
+
+    (29) typed_variable_declaration -> CONST VARIABLE COLON . VARIABLE SEMICOLON
+
+    VARIABLE        shift and go to state 68
+
+
+state 61
+
+    (32) typed_variable_declaration -> CONST VARIABLE error .
+
+    RBRACE          reduce using rule 32 (typed_variable_declaration -> CONST VARIABLE error .)
+    VARIABLE        reduce using rule 32 (typed_variable_declaration -> CONST VARIABLE error .)
+    VAR             reduce using rule 32 (typed_variable_declaration -> CONST VARIABLE error .)
+    LET             reduce using rule 32 (typed_variable_declaration -> CONST VARIABLE error .)
+    CONST           reduce using rule 32 (typed_variable_declaration -> CONST VARIABLE error .)
+
+
+state 62
 
     (10) input -> VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON .
 
@@ -731,14 +890,14 @@ state 44
     RBRACE          reduce using rule 10 (input -> VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON .)
 
 
-state 45
+state 63
 
-    (21) condition -> IF LPAREN expression condition_operator expression RPAREN . LBRACE statements RBRACE
+    (23) condition -> IF LPAREN expression condition_operator expression RPAREN . LBRACE statements RBRACE
 
-    LBRACE          shift and go to state 48
+    LBRACE          shift and go to state 69
 
 
-state 46
+state 64
 
     (9) print -> CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON .
 
@@ -751,16 +910,37 @@ state 46
     RBRACE          reduce using rule 9 (print -> CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON .)
 
 
-state 47
+state 65
 
-    (26) arguments -> argument COMMA arguments .
+    (34) arguments -> argument COMMA arguments .
 
-    RPAREN          reduce using rule 26 (arguments -> argument COMMA arguments .)
+    RPAREN          reduce using rule 34 (arguments -> argument COMMA arguments .)
 
 
-state 48
+state 66
 
-    (21) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE . statements RBRACE
+    (27) typed_variable_declaration -> VAR VARIABLE COLON VARIABLE . SEMICOLON
+
+    SEMICOLON       shift and go to state 70
+
+
+state 67
+
+    (28) typed_variable_declaration -> LET VARIABLE COLON VARIABLE . SEMICOLON
+
+    SEMICOLON       shift and go to state 71
+
+
+state 68
+
+    (29) typed_variable_declaration -> CONST VARIABLE COLON VARIABLE . SEMICOLON
+
+    SEMICOLON       shift and go to state 72
+
+
+state 69
+
+    (23) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE . statements RBRACE
     (2) statements -> . statement
     (3) statements -> . statements statement
     (4) statement -> . print
@@ -769,10 +949,10 @@ state 48
     (7) statement -> . error
     (8) statement -> . condition
     (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+    (38) structure_declaration -> . CLASS VARIABLE LBRACE typed_variable_declarations RBRACE
     (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
     (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
 
     error           shift and go to state 7
     CONSOLE         shift and go to state 9
@@ -780,16 +960,49 @@ state 48
     VARIABLE        shift and go to state 11
     IF              shift and go to state 12
 
-    statements                     shift and go to state 49
+    statements                     shift and go to state 73
     statement                      shift and go to state 3
     print                          shift and go to state 4
     structure_declaration          shift and go to state 5
     input                          shift and go to state 6
     condition                      shift and go to state 8
 
-state 49
+state 70
 
-    (21) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements . RBRACE
+    (27) typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .
+
+    RBRACE          reduce using rule 27 (typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .)
+    VARIABLE        reduce using rule 27 (typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .)
+    VAR             reduce using rule 27 (typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .)
+    LET             reduce using rule 27 (typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .)
+    CONST           reduce using rule 27 (typed_variable_declaration -> VAR VARIABLE COLON VARIABLE SEMICOLON .)
+
+
+state 71
+
+    (28) typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .
+
+    RBRACE          reduce using rule 28 (typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .)
+    VARIABLE        reduce using rule 28 (typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .)
+    VAR             reduce using rule 28 (typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .)
+    LET             reduce using rule 28 (typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .)
+    CONST           reduce using rule 28 (typed_variable_declaration -> LET VARIABLE COLON VARIABLE SEMICOLON .)
+
+
+state 72
+
+    (29) typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .
+
+    RBRACE          reduce using rule 29 (typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .)
+    VARIABLE        reduce using rule 29 (typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .)
+    VAR             reduce using rule 29 (typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .)
+    LET             reduce using rule 29 (typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .)
+    CONST           reduce using rule 29 (typed_variable_declaration -> CONST VARIABLE COLON VARIABLE SEMICOLON .)
+
+
+state 73
+
+    (23) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements . RBRACE
     (3) statements -> statements . statement
     (4) statement -> . print
     (5) statement -> . structure_declaration
@@ -797,12 +1010,12 @@ state 49
     (7) statement -> . error
     (8) statement -> . condition
     (9) print -> . CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON
-    (30) structure_declaration -> . CLASS VARIABLE LBRACE statements RBRACE
+    (38) structure_declaration -> . CLASS VARIABLE LBRACE typed_variable_declarations RBRACE
     (10) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
     (11) input -> . VARIABLE ASSIGN INPUT LPAREN RPAREN
-    (21) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
+    (23) condition -> . IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE
 
-    RBRACE          shift and go to state 50
+    RBRACE          shift and go to state 74
     error           shift and go to state 7
     CONSOLE         shift and go to state 9
     CLASS           shift and go to state 10
@@ -815,19 +1028,19 @@ state 49
     input                          shift and go to state 6
     condition                      shift and go to state 8
 
-state 50
+state 74
 
-    (21) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .
+    (23) condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .
 
-    error           reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    CONSOLE         reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    CLASS           reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    VARIABLE        reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    IF              reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    $end            reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
-    RBRACE          reduce using rule 21 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    error           reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    CONSOLE         reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    CLASS           reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    VARIABLE        reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    IF              reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    $end            reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
+    RBRACE          reduce using rule 23 (condition -> IF LPAREN expression condition_operator expression RPAREN LBRACE statements RBRACE .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for PLUS in state 41 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 52 resolved as shift

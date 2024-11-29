@@ -75,11 +75,16 @@ def run_TypeScript(text_input):
     print("Análisis completado. Los errores semánticos se han guardado en el archivo de registro:", log_filename)
 
 
-# Función para el botón "Run"
+def validate_input(text_input):
+    if not text_input.strip():
+        print("No se ha ingresado texto para analizar.")
+        return False
+    return True
+
 def on_run():
     input_text_content = code_text.get(1.0, tk.END)
-    run_TypeScript(input_text_content)
-
+    if validate_input(input_text_content):
+        run_TypeScript(input_text_content)
 
 # Crear la ventana principal
 root = tk.Tk()
@@ -106,13 +111,15 @@ edit_user_button = tk.Button(header, text="Editar Usuario", bg="orange", fg="whi
 edit_user_button.grid(row=0, column=3, padx=10, pady=5, sticky="e")
 
 # Añadir el logo y el título al encabezado
-logo_image = Image.open("typescript_logo.png")
-logo_image = logo_image.resize((30, 30), Image.LANCZOS)
-logo = ImageTk.PhotoImage(logo_image)
-
-logo_label = tk.Label(header, image=logo, bg="#3498DB")
-logo_label.image = logo  # Mantener una referencia de la imagen
-logo_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+try:
+    logo_image = Image.open("typescript_logo.png")
+    logo_image = logo_image.resize((30, 30), Image.LANCZOS)
+    logo = ImageTk.PhotoImage(logo_image)
+    logo_label = tk.Label(header, image=logo, bg="#3498DB")
+    logo_label.image = logo
+    logo_label.grid(row=0, column=0, padx=10, pady=5, sticky="w")
+except FileNotFoundError:
+    print("Error: No se encontró el archivo 'typescript_logo.png'")
 
 title_label = tk.Label(header, text="TypeScript Code Analyzer", font=("Arial", 16, "bold"), fg="white", bg="#3498DB")
 title_label.grid(row=0, column=1, sticky="w")
