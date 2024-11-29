@@ -29,11 +29,11 @@ def p_print(p):
     '''print : CONSOLE DOT LOG LPAREN arguments RPAREN SEMICOLON'''
     p[0] = f"Console.log statement: {p[5]}"
 
-# Solicitud de datos por teclado 
 def p_input(p):
-  '''input : VARIABLE ASSIGN INPUT LPAREN RPAREN SEMICOLON
-            | VARIABLE ASSIGN INPUT LPAREN RPAREN '''
-  pass
+    '''input : VARIABLE ASSIGN PROMPT LPAREN RPAREN SEMICOLON
+            | LET VARIABLE ASSIGN PROMPT LPAREN RPAREN SEMICOLON
+            | VAR VARIABLE ASSIGN PROMPT LPAREN RPAREN SEMICOLON'''
+    p[0] = f"Solicitud de datos asignada a variable '{p[1]}'"
 
 #expresiones aritméticas con uno o más operadores
 def p_expression(p):

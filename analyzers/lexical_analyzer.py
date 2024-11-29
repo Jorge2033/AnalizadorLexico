@@ -38,7 +38,7 @@ reserved = {
     'extends': 'EXTENDS',
     'implements': 'IMPLEMENTS',
     'print': 'PRINT',
-    'input': 'INPUT', 
+    'prompt': 'PROMPT', 
     'console': 'CONSOLE',
     'log': 'LOG',
 }
