@@ -1,0 +1,2 @@
+Error de sintaxis en línea 1, posición 0: Token inesperado 'for'
+Error en línea 1: Error de sintaxis en línea 1, posición 0: Token inesperado 'for'

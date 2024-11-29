@@ -1,0 +1,2 @@
+Error de sintaxis: fin inesperado de entrada
+Error en línea 1: Error de sintaxis: fin inesperado de entrada
